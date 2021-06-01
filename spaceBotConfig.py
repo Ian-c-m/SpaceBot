@@ -1,0 +1,2 @@
+discordPrefix = "?"
+fileLog = "log.txt"

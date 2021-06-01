@@ -1,6 +1,7 @@
 import discord, requests, urllib, json
 from discord.ext import commands
-from spaceBotCfg import discordToken, discordPrefix, NASAApiKey, fileLog
+from spaceBotConfig import discordPrefix, fileLog
+from spaceBotTokens import discordToken, NASAApiKey
 from datetime import date, datetime
 import os.path
 
