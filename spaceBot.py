@@ -8,7 +8,7 @@ import random
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(discordPrefix))
 
-debug = True
+debug = False
 
 
 @bot.event
