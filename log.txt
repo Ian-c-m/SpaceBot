@@ -1,0 +1,17 @@
+
+2021-06-01 15:39:54 Logged in as SpaceBot#7828, prefix ?
+2021-06-01 15:39:58 Big Spender#7291 used APOD command
+2021-06-01 15:39:58 Skipping fetching new image, as still same date
+2021-06-01 15:39:58 Failed to run commandAPOD
+2021-06-01 15:39:58 set_image() got an unexpected keyword argument 'title'
+2021-06-01 15:41:42 Logged in as SpaceBot#7828, prefix ?
+2021-06-01 15:41:42 Big Spender#7291 used APOD command
+2021-06-01 15:41:42 Skipping fetching new image, as still same date
+2021-06-01 15:42:00 Logged in as SpaceBot#7828, prefix ?
+2021-06-01 15:42:01 Big Spender#7291 used APOD command
+2021-06-01 15:42:01 Skipping fetching new image, as still same date
+2021-06-01 15:42:01 Failed to run commandAPOD
+2021-06-01 15:42:01 add_field() missing 1 required keyword-only argument: 'value'
+2021-06-01 15:42:28 Logged in as SpaceBot#7828, prefix ?
+2021-06-01 15:42:30 Big Spender#7291 used APOD command
+2021-06-01 15:42:30 Skipping fetching new image, as still same date
