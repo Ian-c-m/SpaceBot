@@ -445,4 +445,3 @@ bot.add_cog(commandSF(bot))
 
 #main bot run command.
 bot.run(spaceBotTokens.discordToken)
-
