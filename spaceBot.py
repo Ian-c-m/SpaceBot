@@ -2,7 +2,7 @@ import discord, requests, urllib, json
 from discord.ext import commands
 from spaceBotConfig import discordPrefix, fileLog
 from spaceBotTokens import discordToken, NASAApiKey
-from datetime import date, datetime
+from datetime import datetime
 import os.path
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(discordPrefix))
