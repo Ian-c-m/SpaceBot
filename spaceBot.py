@@ -51,7 +51,7 @@ class commandISS(commands.Cog, name="ISS"):
         self.bot = bot
 
     @commands.command(name="iss", help="Shows current location of the International Space Station", brief="Finds the ISS")
-    async def iss(ctx):
+    async def iss(self, ctx):
         if not ctx.author.bot:
             log("{} used ISS command".format(ctx.author))
             await ctx.send("The ISS is in space, dummy!")
@@ -67,7 +67,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
         self.bot = bot
 
     @commands.command(name="pw", help="Weather forecast for a given planet in our solar system. \nTry ?pw pluto", brief="Different Planet's Weather")
-    async def weather(ctx, planetName):
+    async def weather(self, ctx, planetName):
         if not ctx.author.bot:
             try:
                 
@@ -116,7 +116,7 @@ class commandAPOD(commands.Cog, name="Pictures"):
         self.bot = bot
 
     @commands.command(name="apod", help="Shows NASA's Astronomy Picture Of the Day", brief="Shows a cool space picture")
-    async def apod(ctx):
+    async def apod(self, ctx):
         if not ctx.author.bot:
             try:
 
@@ -181,7 +181,7 @@ class commandSF(commands.Cog, name="Facts"):
         self.bot = bot
 
     @commands.command(name="facts", help="Shows interesting facts about space", brief="Space Facts!")
-    async def facts(ctx):
+    async def facts(self, ctx):
         if not ctx.author.bot:
             try:
 
@@ -205,7 +205,7 @@ class commandAstros(commands.Cog, name="Astronauts"):
         self.bot = bot
 
     @commands.command(name="astros", help="Shows the number of astronatus in space. \nThanks to Natronics at https://api.open-notify.org", brief="Astronauts!")
-    async def astros(ctx):
+    async def astros(self, ctx):
         if not ctx.author.bot:
             try:
                 log("{} used Astros command".format(ctx.author))
@@ -440,5 +440,7 @@ bot.add_cog(commandAstros(bot))
 bot.add_cog(commandISS(bot))
 bot.add_cog(commandPW(bot))
 bot.add_cog(commandSF(bot))
+
 #main bot run command.
 bot.run(spaceBotTokens.discordToken)
+
