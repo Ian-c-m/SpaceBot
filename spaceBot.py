@@ -54,12 +54,13 @@ class commandISS(commands.Cog, name="ISS"):
     async def iss(self, ctx):
         if not ctx.author.bot:
             log("{} used ISS command".format(ctx.author))
-            await ctx.send("The ISS is in space, dummy!")
-            iss = getISS()
-            lat = iss[0]
-            lon = iss[1]
-            response = "Current position: " + lat + ", " + lon
-            await ctx.send(response)
+            async with ctx.typing():
+                #await ctx.send("The ISS is in space, dummy!")
+                iss = getISS()
+                lat = iss[0]
+                lon = iss[1]
+                response = "Current position: " + lat + ", " + lon
+                await ctx.send(response)
 
 
 class commandPW(commands.Cog, name="Planet Weather"):
@@ -119,55 +120,56 @@ class commandAPOD(commands.Cog, name="Pictures"):
     async def apod(self, ctx):
         if not ctx.author.bot:
             try:
+                #shows the ... typing animation until the message gets sent. shows that the bot has not ignored the request
+                async with ctx.typing():
+                    log("{} used APOD command".format(ctx.author))
+                    result = getAPOD()
 
-                log("{} used APOD command".format(ctx.author))
-                result = getAPOD()
 
+                    #APOD() got an error when running
+                    if result == "api fail":
+                        await ctx.send("Unable to get Astronomy Picture Of the Day.")
+                        
 
-                #APOD() got an error when running
-                if result == "api fail":
-                    await ctx.send("Unable to get Astronomy Picture Of the Day.")
                     
-
-                
-                else:
-                #no error with APOD(), so send data
-                    with open("apoddata.txt", "r") as jsonFile:
-                        metadata = json.load(jsonFile)
-                        for data in metadata:
-                            try:
-                                #if the media is a video, then just send the url
-                                if data['mediaType'] == "video":
+                    else:
+                    #no error with APOD(), so send data
+                        with open("apoddata.txt", "r") as jsonFile:
+                            metadata = json.load(jsonFile)
+                            for data in metadata:
+                                try:
+                                    #if the media is a video, then just send the url
+                                    if data['mediaType'] == "video":
+                                            
+                                        await ctx.send("Today's Astronomy Picture Of the Day is a video.")
+                                        await ctx.send(data['url'])
+                                        jsonFile.close()
                                         
-                                    await ctx.send("Today's Astronomy Picture Of the Day is a video.")
-                                    await ctx.send(data['url'])
-                                    jsonFile.close()
-                                    
 
-                                #if the media is an image, then embed it with a title
-                                elif data['mediaType'] == "image":
-                                    picTitle = data['title']
-                                    extension = data['fileType']
-                                    apodFile = "apod." + extension
+                                    #if the media is an image, then embed it with a title
+                                    elif data['mediaType'] == "image":
+                                        picTitle = data['title']
+                                        extension = data['fileType']
+                                        apodFile = "apod." + extension
 
-                                    file = discord.File(apodFile, filename="image.png")
+                                        file = discord.File(apodFile, filename="image.png")
+                                        
+                                        embed = discord.Embed()
+                                        embed.add_field(name="Title", value=picTitle)
+                                        embed.set_image(url="attachment://image.png")
+                                        
+                                        await ctx.send(file=file, embed=embed)
+                                        jsonFile.close()
+                                        
                                     
-                                    embed = discord.Embed()
-                                    embed.add_field(name="Title", value=picTitle)
-                                    embed.set_image(url="attachment://image.png")
-                                    
-                                    await ctx.send(file=file, embed=embed)
-                                    jsonFile.close()
-                                    
+                                    #edge case where mediaType is neither video or image
+                                    else:
+                                        await ctx.send("Unable to send APOD, invalid Media type")
+                                        log("Unable to send APOD, media type is {}".format(data['mediaType']))
                                 
-                                #edge case where mediaType is neither video or image
-                                else:
-                                    await ctx.send("Unable to send APOD, invalid Media type")
-                                    log("Unable to send APOD, media type is {}".format(data['mediaType']))
-                            
-                            except JSONDecodeError:
-                                log("apoddata.txt was empty in commandAPOD")
-                                await ctx.send("Unable to send APOD, no data.")
+                                except JSONDecodeError:
+                                    log("apoddata.txt was empty in commandAPOD")
+                                    await ctx.send("Unable to send APOD, no data.")
 
 
             except Exception as e:
