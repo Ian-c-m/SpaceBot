@@ -395,11 +395,6 @@ def getAstros():
             log("Same day, skipping checking API for astros")
             if debug:
                 print("Same day, skipping checking API for astros")
-                
-            
-                
-                    
-                    
             
             
     except Exception as e:
@@ -407,6 +402,34 @@ def getAstros():
         log(str(e))
         if debug:
             print("Error running getAstros")
+            print(str(e))
+        
+
+def getPeopleInSpace():
+    try:
+        url = "http://api.open-notify.org/astros.json"
+        with urllib.request.urlopen(url) as surl:
+               
+            data = json.loads(surl.read().decode())
+            
+            if data['message'] == "success":
+                people = data['number']
+                if debug:
+                    print(people)
+                    print(type(people))
+                return(people)
+            
+            else:
+                log("Failed to getPeopleInSpace")
+                if debug:
+                    print("Failed to getPeopleInSpace")
+                return(0)
+                
+            
+    except Exception as e:
+        log("Failed to run getPeopleInSpace")
+        log(str(e))
+        if debug:
             print(str(e))
 
 
@@ -437,6 +460,8 @@ def getISS():
             print("Error running getISS")
             print(str(e))
             
+
+            print(str(e))
 
 
 #helper function to log info.
