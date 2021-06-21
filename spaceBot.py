@@ -345,12 +345,12 @@ def getAPOD():
 def getAstros():
     try:
         
-        #if os.path.getsize("astrosdata.txt") > 10:
+        
         
         with open("astrosdata.txt", "r") as jsonFile:
-    
-            metadata = json.load(jsonFile)
-            try:                
+            try:
+                metadata = json.load(jsonFile)
+                            
                 for data in metadata:                    
                     lastRun = data['lastRun']                    
                     jsonFile.close()
