@@ -17,4 +17,4 @@ Created by Big Spender#7291
 
 ## Future Features
 - [ ] Add more facts
-- [ ] Prefix per server basis config
+- [ ] Per server basis config
