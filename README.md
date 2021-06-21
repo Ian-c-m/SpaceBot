@@ -13,3 +13,8 @@ Created by Big Spender#7291
 * Embed links
 * Attach Files
 * Add Reactions
+
+
+## Future Features
+- [ ] Add more facts
+- [ ] Prefix per server basis config
