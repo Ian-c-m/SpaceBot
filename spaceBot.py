@@ -62,6 +62,8 @@ class commandISS(commands.Cog, name="ISS"):
                 lon = iss[1]
                 response = f"Current position: {lat}, {lon}"
                 await ctx.send(response)
+                mapLink=f"https://www.google.com/maps/place/{lat},{lon}"
+                await ctx.send(mapLink)
 
 
 class commandPW(commands.Cog, name="Planet Weather"):
