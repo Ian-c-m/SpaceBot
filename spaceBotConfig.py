@@ -1,3 +1,3 @@
 discordPrefix = "?"
 fileLog = "log.txt"
-scriptVersion = "v0.1.1"
+scriptVersion = "v0.2.0"
