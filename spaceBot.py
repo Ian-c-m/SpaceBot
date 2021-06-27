@@ -33,7 +33,7 @@ async def afterReady(status=False):
         for guild in bot.guilds:
             log("- " + guild.name + " " + str(guild.id))
             
-        game = discord.Game("f{spaceBotConfig.discordPrefix}help")
+        game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
         
         log(f"INFO - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")        
