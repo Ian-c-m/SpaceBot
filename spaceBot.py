@@ -23,24 +23,25 @@ async def afterReady(status=False):
     
     if status == True:
         log("--------------")
-        log("Logged in as: {}".format(bot.user.name))
-        log("ID: {}".format(bot.user.id))
-        log("Discord Version: {}".format(discord.__version__))
-        log("Script Version: {}".format(spaceBotConfig.scriptVersion))
-        log("Prefix: {}".format(spaceBotConfig.discordPrefix))
+        log(f"INFO - Logged in as: {bot.user.name}")
+        log(f"INFO - ID: {bot.user.id}")
+        log(f"INFO - Discord Version: {discord.__version__}")
+        log(f"INFO - Script Version: {spaceBotConfig.scriptVersion}")
+        log(f"INFO - Prefix: {spaceBotConfig.discordPrefix}")
 
-        log("Connected to following servers:")
+        log("INFO - Connected to following servers:")
         for guild in bot.guilds:
             log("- " + guild.name + " " + str(guild.id))
             
-        game = discord.Game("{}help".format(spaceBotConfig.discordPrefix))
+        game = discord.Game("f{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
         
-        log("Status changed to \"Playing {}help\"".format(spaceBotConfig.discordPrefix))        
+        log(f"INFO - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")        
         print("Space Bot Ready")
 
     else:
-        print("afterReady called, but was not ready.")
+        log("ERROR - afterReady called, but was not ready")
+        print("afterReady called, but was not ready")
         return
 
 
@@ -53,13 +54,13 @@ class commandISS(commands.Cog, name="ISS"):
     @commands.command(name="iss", help="Shows current location of the International Space Station", brief="Finds the ISS")
     async def iss(self, ctx):
         if not ctx.author.bot:
-            log("{} used ISS command".format(ctx.author))
+            log(f"INFO - {ctx.author} used ISS command")
             async with ctx.typing():
                 #await ctx.send("The ISS is in space, dummy!")
                 iss = getISS()
                 lat = iss[0]
                 lon = iss[1]
-                response = "Current position: " + lat + ", " + lon
+                response = f"Current position: {lat}, {lon}"
                 await ctx.send(response)
 
 
@@ -72,7 +73,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
         if not ctx.author.bot:
             try:
                 
-                log("{} used PW command".format(ctx.author))
+                log(f"INFO - {ctx.author} used PW command")
                     
                 planet = str(planetName).lower()
 
@@ -101,13 +102,13 @@ class commandPW(commands.Cog, name="Planet Weather"):
                 elif planet ==  "pluto":
                     message = "Pluto averages -388°F (-233°C). I'm still annoyed that it's not a planet."
                 else:
-                    log("Unknown planet")
+                    log("ERROR - Unknown planet")
                     message = "Unknown planet! Try again..."
 
                 await ctx.send(message)
 
             except Exception as e:
-                log("Error running commandPW")
+                log("ERROR - Error running commandPW")
                 log(str(e))
 
 
@@ -122,7 +123,7 @@ class commandAPOD(commands.Cog, name="Pictures"):
             try:
                 #shows the ... typing animation until the message gets sent. shows that the bot has not ignored the request
                 async with ctx.typing():
-                    log("{} used APOD command".format(ctx.author))
+                    log(f"INFO - {ctx.author} used APOD command")
                     result = getAPOD()
 
 
@@ -154,26 +155,30 @@ class commandAPOD(commands.Cog, name="Pictures"):
 
                                         file = discord.File(apodFile, filename="image.png")
                                         
-                                        embed = discord.Embed()
-                                        embed.add_field(name="Title", value=picTitle)
-                                        embed.set_image(url="attachment://image.png")
+                                        embed = discord.Embed(title=picTitle)
                                         
-                                        await ctx.send(file=file, embed=embed)
+                                        
+                                        embed.set_image(url="attachment://image.png")
+                                        embed.set_footer(text=data['explanation'])
                                         jsonFile.close()
+
+                                        await ctx.send(file=file, embed=embed)
+                                        
                                         
                                     
                                     #edge case where mediaType is neither video or image
                                     else:
-                                        await ctx.send("Unable to send APOD, invalid Media type")
-                                        log("Unable to send APOD, media type is {}".format(data['mediaType']))
+                                        await ctx.send("Unable to send APOD, invalid media type")
+                                        log(f"ERROR - Unable to send APOD, media type is {data['mediaType']}")
                                 
+
                                 except JSONDecodeError:
-                                    log("apoddata.txt was empty in commandAPOD")
+                                    log("ERROR - apoddata.txt was empty in commandAPOD")
                                     await ctx.send("Unable to send APOD, no data.")
 
 
             except Exception as e:
-                log("Error running commandAPOD")
+                log("ERROR - Error running commandAPOD")
                 log(str(e))
         
 
@@ -187,7 +192,7 @@ class commandSF(commands.Cog, name="Facts"):
         if not ctx.author.bot:
             try:
 
-                log("{} used SF command".format(ctx.author))
+                log(f"INFO - {ctx.author} used SF command")
 
                 #a list of facts            
                 lines = open("facts.txt").read().splitlines()
@@ -197,7 +202,7 @@ class commandSF(commands.Cog, name="Facts"):
 
                 
             except Exception as e:
-                log("Error running commandSF")
+                log("ERROR - Error running commandSF")
                 log(str(e))
 
 
@@ -210,37 +215,39 @@ class commandAstros(commands.Cog, name="Astronauts"):
     async def astros(self, ctx):
         if not ctx.author.bot:
             try:
-                log("{} used Astros command".format(ctx.author))
-                
-                getAstros()
-                try:
-                    with open("astrosdata.txt", "r") as jsonFile:
-                        try:
-                            metadata = json.load(jsonFile)
-                            for data in metadata:
-                                numPeople = data['people']
-                            jsonFile.close()
+                async with ctx.typing():
+                    log(f"INFO - {ctx.author} used Astros command")
+                    
+                    #updates astros data if neccessary
+                    getAstros()                 
 
-                        #if there is no data in the txt file, then set a default value.    
+
+                    #turns json file into pretty text for discord
+                    with open ("astrosjson.txt", "r") as jsonFile:
+                        try:
+                            data = json.load(jsonFile)
+                            numPeople = data['number']
+                            names = data['people']
+
+                            replyDetails = ""
+                            for person in names:
+                                replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
+                                
+                                
+                        #if there is no data in the txt file, then set default values.    
                         except JSONDecodeError:
                             jsonFile.close()
                             numPeople = 0
-                            
+                            replyDetails = "Unable to fetch details"
 
-                #if the file doesn't exist, then create it for next time.
-                except IOError:
-                    log("astrosdata.txt did not exist, created it.")
-                    with open("astrosdata.txt", "w") as jsonFile:
-                        jsonFile.close()
-                        numPeople = 0
-                    
-
-                await ctx.send("There are {} people in space right now!".format(numPeople))
+                    #sends the list of people in space and their craft.
+                    await ctx.send(f"There are {numPeople} people in space right now!")
+                    await ctx.send(replyDetails)
 
 
                 
             except Exception as e:
-                log("Error running commandAstros")
+                log("ERROR - Error running commandAstros")
                 log(str(e))
 
 
@@ -257,7 +264,7 @@ def getAPOD():
 
             #if file is empty, then set a default value
             except JSONDecodeError:
-                log("apoddata.txt was empty")
+                log("INFO - apoddata.txt was empty")
                 lastRun = None
 
             jsonFile.close()
@@ -267,10 +274,10 @@ def getAPOD():
         #need to fetch new apod if it hasn't been done today        
         if lastRun != dateToday or lastRun is None:
         
-            log("Fetching new image for today")
+            log("INFO - Fetching new image for today")
             lastRun = datetime.today().strftime('%Y-%m-%d')
             
-            ApodUrl = "https://api.nasa.gov/planetary/apod?api_key={}".format(spaceBotTokens.NASAApiKey)
+            ApodUrl = f"https://api.nasa.gov/planetary/apod?api_key={spaceBotTokens.NASAApiKey}"
 
             with urllib.request.urlopen(ApodUrl) as surl:
                 data = json.loads(surl.read().decode())
@@ -278,10 +285,11 @@ def getAPOD():
                 #check that we actually got a response from the API
                 if data is not None:
 
-                    #if media is not an image, it must be a video
-                    if data['media_type'] != "image":
+                    #check if media is a video
+                    if data['media_type'] == "video":
                         vidUrl = data['url']
                         vidTitle = data['title']
+                        
 
                         #saving metadata to file to reference later. saves API calls as only checking once a day for new pic.
                         apodData = [{'lastRun':lastRun, 'mediaType':'video', 'url':vidUrl, 'title':vidTitle}]
@@ -294,10 +302,11 @@ def getAPOD():
 
                     
                     #media is an image
-                    else:
+                    elif data['media_type'] == "image":
                         
                         picUrl = data['hdurl']                        
                         picTitle = data['title']
+                        picExplanation = data['explanation']
                         
                         response = requests.get(picUrl)
                         extension = os.path.splitext(picUrl)[1][1:]
@@ -309,31 +318,36 @@ def getAPOD():
                         file.close()
                         
                         #saving metadata to file to reference later. saves API calls as only checking once a day for new pic.
-                        apodData = [{'lastRun':lastRun, 'mediaType':'image', 'url':picUrl, 'title':picTitle, 'fileType':extension}]
+                        apodData = [{'lastRun':lastRun, 'mediaType':'image', 'url':picUrl, 'title':picTitle, 'explanation':picExplanation, 'fileType':extension}]
 
                         with open ("apoddata.txt", "w") as outfile:
                             json.dump(apodData, outfile)
                             outfile.close()
                         
                         return
+
+                    else:
+                        log(f"ERROR - APOD was not an image or video, instead was {data['media_type']}")
+                        return "api fail"
+
                     
                 else:
-                    log("Failed to get APOD")
+                    log("ERROR - Failed to get APOD")
                     return "api fail"
 
             
         else:            
-            log("Skipping fetching new image, as still same date")
+            log("INFO - Skipping fetching new image, as still same date")
             return
         
     #if the file doesn't exist, then create it for next time.
     except IOError:
         with open("apoddata.txt", "w") as jsonFile:
             jsonFile.close()
-        log("apoddata.txt does not exist, created it.")
+        log("INFO - apoddata.txt does not exist, created it.")
 
     except Exception as e:
-        log("Failed to run getAPOD")
+        log("ERROR - Failed to run getAPOD")
         log(str(e))
         
 
@@ -344,7 +358,6 @@ def getAPOD():
 #Astros helper function, does API calls
 def getAstros():
     try:
-        
         
         
         with open("astrosdata.txt", "r") as jsonFile:
@@ -358,14 +371,15 @@ def getAstros():
             #if file is empty, set a default value.
             except JSONDecodeError:
                 lastRun = None
-                log("astrosdata.txt was empty")
+                log("INFO - astrosdata.txt was empty")
         
 
     #if file does not exist, create it for next time.
     except IOError:
         with open("astrosdata.txt", "w") as jsonFile: 
             jsonFile.close()
-        log("astrosdata.txt did not exist, created it.")
+            lastRun = None
+        log("INFO - astrosdata.txt did not exist, created it.")
                           
     
    
@@ -375,9 +389,9 @@ def getAstros():
     #need to fetch new apod if it hasn't been done today, or has no value.        
     if lastRun != dateToday or lastRun is None:
 
-        log("Fetching new astros data")
+        log("INFO - Fetching new astros data")
         
-        lastRun = dateToday            
+        lastRun = dateToday
         
         url = "http://api.open-notify.org/astros.json"
         with urllib.request.urlopen(url) as surl:
@@ -385,22 +399,23 @@ def getAstros():
             data = json.loads(surl.read().decode())
             
             if data['message'] == "success":
-                people = data['number']
-
+                with open ("astrosjson.txt", "w") as outfile:
+                    json.dump(data, outfile)
+                    outfile.close()
                 
-                #saving metadata to file to reference later. saves API calls as only checking once a day for new pic.
-                astrosData = [{'lastRun':lastRun, 'people':people}]
+                #saving metadata to file to reference later. 
+                astrosData = [{'lastRun':lastRun}]
                 
                 with open ("astrosdata.txt", "w") as outfile:
                     json.dump(astrosData, outfile)
                     outfile.close()
             
             else:
-                log("Failed to getastros")
+                log("ERROR - Failed to getastros")
                 return("api fail")
 
     else:
-        log("Same day, skipping checking API for astros")
+        log("INFO - Same day, skipping checking API for astros")
 
 
 
@@ -415,7 +430,7 @@ def getISS():
         return lat, lon
     
     except Exception as e:
-        log("Failed to run getISS")
+        log("ERROR - Failed to run getISS")
         log(str(e))
         return
 

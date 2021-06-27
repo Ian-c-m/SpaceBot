@@ -1,39 +1,14 @@
 
-2021-06-21 14:18:44 --------------
-2021-06-21 14:18:44 Logged in as: SpaceBot
-2021-06-21 14:18:44 ID: 849246857309323284
-2021-06-21 14:18:44 Discord Version: 1.6.0
-2021-06-21 14:18:44 Script Version: v3
-2021-06-21 14:18:44 Prefix: ?
-2021-06-21 14:18:44 Connected to following servers:
-2021-06-21 14:18:44 - Testys 587666101509554211
-2021-06-21 14:18:44 - Big Spender Bot Support Server 855038432438517770
-2021-06-21 14:18:44 Status changed to "Playing ?help"
-2021-06-21 14:18:56 Big Spender#7291 used Astros command
-2021-06-21 14:18:56 Error running commandAstros
-2021-06-21 14:18:56 Expecting value: line 1 column 1 (char 0)
-2021-06-21 14:20:36 --------------
-2021-06-21 14:20:36 Logged in as: SpaceBot
-2021-06-21 14:20:36 ID: 849246857309323284
-2021-06-21 14:20:36 Discord Version: 1.6.0
-2021-06-21 14:20:36 Script Version: v3
-2021-06-21 14:20:36 Prefix: ?
-2021-06-21 14:20:36 Connected to following servers:
-2021-06-21 14:20:36 - Testys 587666101509554211
-2021-06-21 14:20:36 - Big Spender Bot Support Server 855038432438517770
-2021-06-21 14:20:36 Status changed to "Playing ?help"
-2021-06-21 14:20:38 Big Spender#7291 used Astros command
-2021-06-21 14:20:56 Big Spender#7291 used Astros command
-2021-06-21 14:22:26 --------------
-2021-06-21 14:22:26 Logged in as: SpaceBot
-2021-06-21 14:22:26 ID: 849246857309323284
-2021-06-21 14:22:26 Discord Version: 1.6.0
-2021-06-21 14:22:26 Script Version: v3
-2021-06-21 14:22:26 Prefix: ?
-2021-06-21 14:22:26 Connected to following servers:
-2021-06-21 14:22:26 - Testys 587666101509554211
-2021-06-21 14:22:26 - Big Spender Bot Support Server 855038432438517770
-2021-06-21 14:22:26 Status changed to "Playing ?help"
-2021-06-21 14:22:32 Big Spender#7291 used Astros command
-2021-06-21 14:22:32 astrosdata.txt was empty
-2021-06-21 14:22:32 Fetching new astros data
+2021-06-27 13:37:09 --------------
+2021-06-27 13:37:09 INFO - Logged in as: SpaceBot
+2021-06-27 13:37:09 INFO - ID: 849246857309323284
+2021-06-27 13:37:09 INFO - Discord Version: 1.6.0
+2021-06-27 13:37:09 INFO - Script Version: v0.2.0
+2021-06-27 13:37:09 INFO - Prefix: ?
+2021-06-27 13:37:09 INFO - Connected to following servers:
+2021-06-27 13:37:09 - Testys 587666101509554211
+2021-06-27 13:37:09 - Big Spender Bot Support Server 855038432438517770
+2021-06-27 13:37:09 INFO - Status changed to "Playing ?help"
+2021-06-27 13:37:12 INFO - Big Spender#7291 used APOD command
+2021-06-27 13:37:12 INFO - apoddata.txt was empty
+2021-06-27 13:37:12 INFO - Fetching new image for today

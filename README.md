@@ -17,4 +17,3 @@ Created by Big Spender#7291
 
 ## Future Features
 - [ ] Add more facts
-- [ ] Per server basis config
