@@ -1,5 +1,7 @@
 # SpaceBot
+
 ![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/pfp.png)
+
 A Discord bot that has cool space features.
 Created by Big Spender#7291
 
