@@ -19,7 +19,6 @@ Created by Big Spender#7291
 | ?news | | Shows today's space news |
 | ?apod | | Shows NASA's Astronomy Picture of the Day |
 | ?pw | planet name e.g. ?pw mars | Gives information on a planet's weather. |
-|-|-|-|
 
 ## Current Features
 - Space People (astronauts!)
