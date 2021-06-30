@@ -1,15 +1,11 @@
+import discord, requests, urllib, json, random, spaceBotConfig, spaceBotTokens, feedparser, os.path
 from json.decoder import JSONDecodeError
-import discord, requests, urllib, json, random
 from discord.ext import commands
-import spaceBotConfig
-import spaceBotTokens
 from datetime import datetime
-import os.path
+
 
 #uses either prefix or @ mention to activate
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix))
-
-
 
 
 #called when successfully logged into Discord API. Don't do any API calls in here though.
@@ -45,13 +41,32 @@ async def afterReady(status=False):
         return
 
 
+#########################################################################################
+
+
+class commandNews(commands.Cog, name="News"):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command(name="news", brief = "Gets space news", help="Gets today's space news. Courtesy of space.com")
+    async def news(self, ctx):
+        #could be slow at getting stuff from rss feed, so show that bot is responding.
+        with ctx.typing():
+
+            news = getNews()
+            if news is False:
+                await ctx.send("Unable to gather news.")
+            else:
+                await ctx.send(embed=news)                               
+                                        
+                                        
 
 
 class commandISS(commands.Cog, name="ISS"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="iss", help="Shows current location of the International Space Station", brief="Finds the ISS")
+    @commands.command(name="iss", brief="Finds the ISS", help="Shows current location of the International Space Station. Courtesy of open-notify.org")
     async def iss(self, ctx):
         if not ctx.author.bot:
             log(f"INFO - {ctx.author} used ISS command")
@@ -70,7 +85,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="pw", help="Weather forecast for a given planet in our solar system. \nTry ?pw pluto", brief="Different Planet's Weather")
+    @commands.command(name="pw", brief="Different Planet's Weather", help="Weather forecast for a given planet in our solar system. \nTry ?pw pluto")
     async def weather(self, ctx, planetName):
         if not ctx.author.bot:
             try:
@@ -119,7 +134,7 @@ class commandAPOD(commands.Cog, name="Pictures"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="apod", help="Shows NASA's Astronomy Picture Of the Day", brief="Shows a cool space picture")
+    @commands.command(name="apod", brief="Shows a cool space picture", help="Shows NASA's Astronomy Picture Of the Day. Courtesy of NASA.gov", )
     async def apod(self, ctx):
         if not ctx.author.bot:
             try:
@@ -213,7 +228,7 @@ class commandAstros(commands.Cog, name="Astronauts"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="astros", help="Shows the number of astronatus in space. \nThanks to Natronics at https://api.open-notify.org", brief="Astronauts!")
+    @commands.command(name="astros", brief="Astronauts!", help="Shows the number of astronatus in space. Courtesy of open-notify.org")
     async def astros(self, ctx):
         if not ctx.author.bot:
             try:
@@ -252,7 +267,7 @@ class commandAstros(commands.Cog, name="Astronauts"):
                 log("ERROR - Error running commandAstros")
                 log(str(e))
 
-
+#########################################################################################
 
 #Astronomy Picture of the Day helper function, does API calls.
 def getAPOD():
@@ -351,10 +366,7 @@ def getAPOD():
     except Exception as e:
         log("ERROR - Failed to run getAPOD")
         log(str(e))
-        
-
-
-
+  
 
 
 #Astros helper function, does API calls
@@ -421,6 +433,7 @@ def getAstros():
 
 
 
+
 #ISS location helper fucntion, does API calls.
 def getISS():
     
@@ -437,6 +450,40 @@ def getISS():
         return
 
 
+#news helper function. gets today's news from space.com rss feed. returns as discord embed object.
+def getNews():
+   
+
+    today = datetime.now()
+    year = int(today.strftime("%Y"))
+    month = int(today.strftime("%m"))
+    day = int(today.strftime("%d"))
+    stringToday = today.strftime("%Y-%m-%d")
+
+    url = "https://www.space.com/feeds/all"
+
+    #error catching incase url is down/can't connect
+    try:
+        newsfeed = feedparser.parse(url)
+    except Exception as e:
+        log(f"ERROR - Failed to run getNews, url parsing failed. {e}")
+        return False
+
+    embedTitle = f"Space news for {stringToday}"
+    todaysNews = discord.Embed(title=embedTitle)
+
+
+    for entry in newsfeed.entries:
+        #only get today's news.
+        if entry.published_parsed[0] == year and entry.published_parsed[1] == month and entry.published_parsed[2] == day:
+            todaysNews.add_field(name=entry.title, value=entry.link, inline=False)
+
+    return todaysNews
+    
+        
+
+#########################################################################################
+
 
 def log(text):
     try:        
@@ -452,13 +499,14 @@ def log(text):
         print("Error with log function")
         print(str(e))
 
-
+#########################################################################################
 #add cogs
 bot.add_cog(commandAPOD(bot))
 bot.add_cog(commandAstros(bot))
 bot.add_cog(commandISS(bot))
 bot.add_cog(commandPW(bot))
 bot.add_cog(commandSF(bot))
+bot.add_cog(commandNews(bot))
 
 #main bot run command.
-bot.run(spaceBotTokens.discordToken)
+bot.run(spaceBotTokens.spaceBotToken)
