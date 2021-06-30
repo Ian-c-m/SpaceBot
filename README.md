@@ -21,7 +21,7 @@ Created by Big Spender#7291
 | ?pw | planet name e.g. ?pw mars | Gives information on a planet's weather. |
 |-|-|-|
 
-##Current Features
+## Current Features
 - Space People (astronauts!)
 - Space Facts
 - Space Stations
