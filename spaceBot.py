@@ -71,7 +71,6 @@ class commandISS(commands.Cog, name="ISS"):
         if not ctx.author.bot:
             log(f"INFO - {ctx.author} used ISS command")
             async with ctx.typing():
-                #await ctx.send("The ISS is in space, dummy!")
                 iss = getISS()
                 lat = iss[0]
                 lon = iss[1]
@@ -228,7 +227,7 @@ class commandAstros(commands.Cog, name="Astronauts"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="astros", brief="Astronauts!", help="Shows the number of astronatus in space. Courtesy of open-notify.org")
+    @commands.command(name="astros", brief="Astronauts!", help="Shows the number of astronauts in space. Courtesy of open-notify.org")
     async def astros(self, ctx):
         if not ctx.author.bot:
             try:
