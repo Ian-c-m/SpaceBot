@@ -31,7 +31,7 @@ Created by Big Spender#7291
 ## Future Features
 - [ ] More facts
 - [ ] Space Launches
-- [ ] Admin features
+- [ ] Mars Rover Pictures
 
 ## Permissions Needed
 * Send Messages
