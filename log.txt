@@ -1,0 +1,431 @@
+
+2021-07-01 15:46:33 --------------
+2021-07-01 15:46:33 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:46:33 INFO - ID: 811567642799243295
+2021-07-01 15:46:33 INFO - Discord Version: 1.6.0
+2021-07-01 15:46:33 INFO - Script Version: v0.4.0
+2021-07-01 15:46:33 INFO - Prefix: ?
+2021-07-01 15:46:33 INFO - Connected to following servers:
+2021-07-01 15:46:33 - Testys 587666101509554211
+2021-07-01 15:46:33 INFO - Status changed to "Playing ?help"
+2021-07-01 15:46:59 --------------
+2021-07-01 15:46:59 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:46:59 INFO - ID: 811567642799243295
+2021-07-01 15:46:59 INFO - Discord Version: 1.6.0
+2021-07-01 15:46:59 INFO - Script Version: v0.4.0
+2021-07-01 15:46:59 INFO - Prefix: !
+2021-07-01 15:46:59 INFO - Connected to following servers:
+2021-07-01 15:46:59 - Testys 587666101509554211
+2021-07-01 15:46:59 INFO - Status changed to "Playing !help"
+2021-07-01 15:47:20 --------------
+2021-07-01 15:47:20 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:47:20 INFO - ID: 811567642799243295
+2021-07-01 15:47:20 INFO - Discord Version: 1.6.0
+2021-07-01 15:47:20 INFO - Script Version: v0.4.0
+2021-07-01 15:47:20 INFO - Prefix: $
+2021-07-01 15:47:20 INFO - Connected to following servers:
+2021-07-01 15:47:20 - Testys 587666101509554211
+2021-07-01 15:47:20 INFO - Status changed to "Playing $help"
+2021-07-01 15:49:58 INFO - Manifest data retrieved successfully.
+2021-07-01 15:49:59 INFO - Photo data retrieved successfully.
+2021-07-01 15:49:59 INFO - Sent Mars image from curiosity on 2021-06-29
+2021-07-01 15:50:26 --------------
+2021-07-01 15:50:26 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:50:26 INFO - ID: 811567642799243295
+2021-07-01 15:50:26 INFO - Discord Version: 1.6.0
+2021-07-01 15:50:26 INFO - Script Version: v0.4.0
+2021-07-01 15:50:26 INFO - Prefix: $
+2021-07-01 15:50:26 INFO - Connected to following servers:
+2021-07-01 15:50:26 - Testys 587666101509554211
+2021-07-01 15:50:26 INFO - Status changed to "Playing $help"
+2021-07-01 15:54:44 --------------
+2021-07-01 15:54:44 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:54:44 INFO - ID: 811567642799243295
+2021-07-01 15:54:44 INFO - Discord Version: 1.6.0
+2021-07-01 15:54:44 INFO - Script Version: v0.4.0
+2021-07-01 15:54:44 INFO - Prefix: $
+2021-07-01 15:54:44 INFO - Connected to following servers:
+2021-07-01 15:54:44 - Testys 587666101509554211
+2021-07-01 15:54:44 INFO - Status changed to "Playing $help"
+2021-07-01 15:56:34 --------------
+2021-07-01 15:56:34 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:56:34 INFO - ID: 811567642799243295
+2021-07-01 15:56:34 INFO - Discord Version: 1.6.0
+2021-07-01 15:56:34 INFO - Script Version: v0.4.0
+2021-07-01 15:56:34 INFO - Prefix: $
+2021-07-01 15:56:34 INFO - Connected to following servers:
+2021-07-01 15:56:34 - Testys 587666101509554211
+2021-07-01 15:56:34 INFO - Status changed to "Playing $help"
+2021-07-01 15:56:41 INFO - Manifest data retrieved successfully.
+2021-07-01 15:56:42 INFO - Photo data retrieved successfully.
+2021-07-01 15:56:42 INFO - Sent Mars image from curiosity on 2021-06-29
+2021-07-01 15:57:06 INFO - Manifest data retrieved successfully.
+2021-07-01 15:57:07 INFO - Photo data retrieved successfully.
+2021-07-01 15:58:36 --------------
+2021-07-01 15:58:36 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:58:36 INFO - ID: 811567642799243295
+2021-07-01 15:58:36 INFO - Discord Version: 1.6.0
+2021-07-01 15:58:36 INFO - Script Version: v0.4.0
+2021-07-01 15:58:36 INFO - Prefix: $
+2021-07-01 15:58:36 INFO - Connected to following servers:
+2021-07-01 15:58:36 - Testys 587666101509554211
+2021-07-01 15:58:36 INFO - Status changed to "Playing $help"
+2021-07-01 15:58:42 INFO - Big Spender#7291 used $mars command
+2021-07-01 15:58:43 INFO - Manifest data retrieved successfully.
+2021-07-01 15:58:43 INFO - Photo data retrieved successfully.
+2021-07-01 15:58:43 ERROR - Error running $mars. list index out of range
+2021-07-01 15:59:38 --------------
+2021-07-01 15:59:38 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 15:59:38 INFO - ID: 811567642799243295
+2021-07-01 15:59:38 INFO - Discord Version: 1.6.0
+2021-07-01 15:59:38 INFO - Script Version: v0.4.0
+2021-07-01 15:59:38 INFO - Prefix: $
+2021-07-01 15:59:38 INFO - Connected to following servers:
+2021-07-01 15:59:38 - Testys 587666101509554211
+2021-07-01 15:59:38 INFO - Status changed to "Playing $help"
+2021-07-01 15:59:40 INFO - Big Spender#7291 used $mars command
+2021-07-01 15:59:41 INFO - Manifest data retrieved successfully.
+2021-07-01 15:59:41 INFO - Photo data retrieved successfully.
+2021-07-01 15:59:41 ERROR - Error running $mars. list index out of range, https://api.nasa.gov/mars-photos/api/v1/rovers/opportunity/photos?camera=NAVCAM&sol=5111&api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0, https://api.nasa.gov/mars-photos/api/v1/manifests/opportunity?api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0
+2021-07-01 16:03:03 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:03:04 INFO - Manifest data retrieved successfully.
+2021-07-01 16:03:04 INFO - Photo data retrieved successfully.
+2021-07-01 16:03:05 INFO - Sent Mars image from curiosity on 2021-06-29
+2021-07-01 16:03:51 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:03:52 INFO - Manifest data retrieved successfully.
+2021-07-01 16:03:53 INFO - Photo data retrieved successfully.
+2021-07-01 16:03:53 INFO - Sent Mars image from curiosity on 2021-06-29
+2021-07-01 16:04:13 --------------
+2021-07-01 16:04:13 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:04:13 INFO - ID: 811567642799243295
+2021-07-01 16:04:14 INFO - Discord Version: 1.6.0
+2021-07-01 16:04:14 INFO - Script Version: v0.4.0
+2021-07-01 16:04:14 INFO - Prefix: $
+2021-07-01 16:04:14 INFO - Connected to following servers:
+2021-07-01 16:04:14 - Testys 587666101509554211
+2021-07-01 16:04:14 INFO - Status changed to "Playing $help"
+2021-07-01 16:04:15 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:04:16 INFO - Manifest data retrieved successfully.
+2021-07-01 16:04:17 INFO - Photo data retrieved successfully.
+2021-07-01 16:04:17 INFO - Sent Mars image from Curiosity FHAZ on 2021-06-29
+2021-07-01 16:04:25 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:04:26 INFO - Manifest data retrieved successfully.
+2021-07-01 16:04:27 INFO - Photo data retrieved successfully.
+2021-07-01 16:04:27 INFO - Sent Mars image from Curiosity RHAZ on 2021-06-29
+2021-07-01 16:04:39 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:04:40 INFO - Manifest data retrieved successfully.
+2021-07-01 16:04:40 INFO - Photo data retrieved successfully.
+2021-07-01 16:04:40 ERROR - Error running $mars. list index out of range, https://api.nasa.gov/mars-photos/api/v1/rovers/Opportunity/photos?camera=FHAZ&sol=5111&api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0, https://api.nasa.gov/mars-photos/api/v1/manifests/Opportunity?api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0
+2021-07-01 16:05:43 --------------
+2021-07-01 16:05:43 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:05:43 INFO - ID: 811567642799243295
+2021-07-01 16:05:43 INFO - Discord Version: 1.6.0
+2021-07-01 16:05:43 INFO - Script Version: v0.4.0
+2021-07-01 16:05:43 INFO - Prefix: $
+2021-07-01 16:05:43 INFO - Connected to following servers:
+2021-07-01 16:05:43 - Testys 587666101509554211
+2021-07-01 16:05:43 INFO - Status changed to "Playing $help"
+2021-07-01 16:05:47 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:05:48 INFO - Manifest data retrieved successfully.
+2021-07-01 16:05:49 INFO - Photo data retrieved successfully.
+2021-07-01 16:05:49 INFO - Sent Mars image from Curiosity FHAZ on 2021-06-29
+2021-07-01 16:05:49 INFO - https://api.nasa.gov/mars-photos/api/v1/manifests/Curiosity?api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0, https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=FHAZ&sol=3163&api_key=d96lM2CUdlkRvItUscHiFMtxhODCGfCVViEnudd0
+2021-07-01 16:12:30 --------------
+2021-07-01 16:12:30 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:12:30 INFO - ID: 811567642799243295
+2021-07-01 16:12:30 INFO - Discord Version: 1.6.0
+2021-07-01 16:12:30 INFO - Script Version: v0.4.0
+2021-07-01 16:12:30 INFO - Prefix: $
+2021-07-01 16:12:30 INFO - Connected to following servers:
+2021-07-01 16:12:30 - Testys 587666101509554211
+2021-07-01 16:12:30 INFO - Status changed to "Playing $help"
+2021-07-01 16:12:35 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:12:37 INFO - Manifest data retrieved successfully.
+2021-07-01 16:13:16 --------------
+2021-07-01 16:13:16 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:13:16 INFO - ID: 811567642799243295
+2021-07-01 16:13:16 INFO - Discord Version: 1.6.0
+2021-07-01 16:13:16 INFO - Script Version: v0.4.0
+2021-07-01 16:13:16 INFO - Prefix: $
+2021-07-01 16:13:16 INFO - Connected to following servers:
+2021-07-01 16:13:16 - Testys 587666101509554211
+2021-07-01 16:13:16 INFO - Status changed to "Playing $help"
+2021-07-01 16:13:17 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:13:19 INFO - Manifest data retrieved successfully.
+2021-07-01 16:24:22 --------------
+2021-07-01 16:24:22 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:24:22 INFO - ID: 811567642799243295
+2021-07-01 16:24:22 INFO - Discord Version: 1.6.0
+2021-07-01 16:24:22 INFO - Script Version: v0.4.0
+2021-07-01 16:24:22 INFO - Prefix: $
+2021-07-01 16:24:22 INFO - Connected to following servers:
+2021-07-01 16:24:22 - Testys 587666101509554211
+2021-07-01 16:24:22 INFO - Status changed to "Playing $help"
+2021-07-01 16:24:30 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:24:31 INFO - Manifest data retrieved successfully.
+2021-07-01 16:34:36 --------------
+2021-07-01 16:34:36 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:34:36 INFO - ID: 811567642799243295
+2021-07-01 16:34:36 INFO - Discord Version: 1.6.0
+2021-07-01 16:34:36 INFO - Script Version: v0.4.0
+2021-07-01 16:34:36 INFO - Prefix: $
+2021-07-01 16:34:36 INFO - Connected to following servers:
+2021-07-01 16:34:36 - Testys 587666101509554211
+2021-07-01 16:34:36 INFO - Status changed to "Playing $help"
+2021-07-01 16:34:37 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:34:39 INFO - Manifest data retrieved successfully.
+2021-07-01 16:34:39 ERROR - Error running $mars. 400 Bad Request (error code: 50006): Cannot send an empty message
+2021-07-01 16:36:09 --------------
+2021-07-01 16:36:09 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:36:09 INFO - ID: 811567642799243295
+2021-07-01 16:36:09 INFO - Discord Version: 1.6.0
+2021-07-01 16:36:09 INFO - Script Version: v0.4.0
+2021-07-01 16:36:09 INFO - Prefix: $
+2021-07-01 16:36:09 INFO - Connected to following servers:
+2021-07-01 16:36:09 - Testys 587666101509554211
+2021-07-01 16:36:09 INFO - Status changed to "Playing $help"
+2021-07-01 16:36:16 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:36:16 INFO - Incorrect arg supplied in $mars
+2021-07-01 16:36:52 --------------
+2021-07-01 16:36:52 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:36:52 INFO - ID: 811567642799243295
+2021-07-01 16:36:52 INFO - Discord Version: 1.6.0
+2021-07-01 16:36:52 INFO - Script Version: v0.4.0
+2021-07-01 16:36:52 INFO - Prefix: $
+2021-07-01 16:36:52 INFO - Connected to following servers:
+2021-07-01 16:36:52 - Testys 587666101509554211
+2021-07-01 16:36:52 INFO - Status changed to "Playing $help"
+2021-07-01 16:36:55 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:36:55 INFO - Incorrect arg supplied in $mars
+2021-07-01 16:37:03 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:37:03 INFO - Incorrect arg supplied in $mars
+2021-07-01 16:37:08 INFO - Big Spender#7291 used $mars command
+2021-07-01 16:37:09 INFO - Manifest data retrieved successfully.
+2021-07-01 16:37:09 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:37:09 ERROR - Error running $mars. 400 Bad Request (error code: 50006): Cannot send an empty message
+2021-07-01 16:38:19 --------------
+2021-07-01 16:38:19 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:38:19 INFO - ID: 811567642799243295
+2021-07-01 16:38:19 INFO - Discord Version: 1.6.0
+2021-07-01 16:38:19 INFO - Script Version: v0.4.0
+2021-07-01 16:38:19 INFO - Prefix: $
+2021-07-01 16:38:19 INFO - Connected to following servers:
+2021-07-01 16:38:19 - Testys 587666101509554211
+2021-07-01 16:38:19 INFO - Status changed to "Playing $help"
+2021-07-01 16:38:23 INFO - Big Spender#7291 used $mars command o f
+2021-07-01 16:38:24 INFO - Manifest data retrieved successfully.
+2021-07-01 16:38:24 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:38:24 ERROR - Error running $mars. 400 Bad Request (error code: 50006): Cannot send an empty message
+2021-07-01 16:40:23 --------------
+2021-07-01 16:40:23 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:40:23 INFO - ID: 811567642799243295
+2021-07-01 16:40:23 INFO - Discord Version: 1.6.0
+2021-07-01 16:40:23 INFO - Script Version: v0.4.0
+2021-07-01 16:40:23 INFO - Prefix: $
+2021-07-01 16:40:23 INFO - Connected to following servers:
+2021-07-01 16:40:23 INFO - Testys 587666101509554211
+2021-07-01 16:40:23 INFO - Status changed to "Playing $help"
+2021-07-01 16:40:24 INFO - Big Spender#7291 used $mars command o f
+2021-07-01 16:40:25 INFO - Manifest data retrieved successfully.
+2021-07-01 16:40:25 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:40:25 ERROR - Error running $mars. 400 Bad Request (error code: 50006): Cannot send an empty message
+2021-07-01 16:42:39 --------------
+2021-07-01 16:42:39 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:42:39 INFO - ID: 811567642799243295
+2021-07-01 16:42:39 INFO - Discord Version: 1.6.0
+2021-07-01 16:42:39 INFO - Script Version: v0.4.0
+2021-07-01 16:42:39 INFO - Prefix: $
+2021-07-01 16:42:39 INFO - Connected to following servers:
+2021-07-01 16:42:39 INFO - Testys 587666101509554211
+2021-07-01 16:42:39 INFO - Status changed to "Playing $help"
+2021-07-01 16:42:43 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:42:44 INFO - Manifest data retrieved successfully.
+2021-07-01 16:42:44 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:43:48 --------------
+2021-07-01 16:43:48 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:43:48 INFO - ID: 811567642799243295
+2021-07-01 16:43:48 INFO - Discord Version: 1.6.0
+2021-07-01 16:43:48 INFO - Script Version: v0.4.0
+2021-07-01 16:43:48 INFO - Prefix: $
+2021-07-01 16:43:48 INFO - Connected to following servers:
+2021-07-01 16:43:48 INFO - Testys 587666101509554211
+2021-07-01 16:43:48 INFO - Status changed to "Playing $help"
+2021-07-01 16:43:52 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:43:53 INFO - Manifest data retrieved successfully.
+2021-07-01 16:43:53 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:44:34 --------------
+2021-07-01 16:44:34 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:44:34 INFO - ID: 811567642799243295
+2021-07-01 16:44:34 INFO - Discord Version: 1.6.0
+2021-07-01 16:44:34 INFO - Script Version: v0.4.0
+2021-07-01 16:44:34 INFO - Prefix: $
+2021-07-01 16:44:34 INFO - Connected to following servers:
+2021-07-01 16:44:34 INFO - Testys 587666101509554211
+2021-07-01 16:44:34 INFO - Status changed to "Playing $help"
+2021-07-01 16:44:37 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:44:38 INFO - Manifest data retrieved successfully.
+2021-07-01 16:44:38 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:45:30 --------------
+2021-07-01 16:45:30 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:45:30 INFO - ID: 811567642799243295
+2021-07-01 16:45:30 INFO - Discord Version: 1.6.0
+2021-07-01 16:45:30 INFO - Script Version: v0.4.0
+2021-07-01 16:45:30 INFO - Prefix: $
+2021-07-01 16:45:30 INFO - Connected to following servers:
+2021-07-01 16:45:30 INFO - Testys 587666101509554211
+2021-07-01 16:45:30 INFO - Status changed to "Playing $help"
+2021-07-01 16:45:32 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:45:33 INFO - Manifest data retrieved successfully.
+2021-07-01 16:45:33 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:45:56 --------------
+2021-07-01 16:45:56 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:45:56 INFO - ID: 811567642799243295
+2021-07-01 16:45:56 INFO - Discord Version: 1.6.0
+2021-07-01 16:45:56 INFO - Script Version: v0.4.0
+2021-07-01 16:45:56 INFO - Prefix: $
+2021-07-01 16:45:56 INFO - Connected to following servers:
+2021-07-01 16:45:56 INFO - Testys 587666101509554211
+2021-07-01 16:45:56 INFO - Status changed to "Playing $help"
+2021-07-01 16:45:57 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:45:58 INFO - Manifest data retrieved successfully.
+2021-07-01 16:45:58 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:46:41 --------------
+2021-07-01 16:46:41 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:46:41 INFO - ID: 811567642799243295
+2021-07-01 16:46:41 INFO - Discord Version: 1.6.0
+2021-07-01 16:46:41 INFO - Script Version: v0.4.0
+2021-07-01 16:46:41 INFO - Prefix: $
+2021-07-01 16:46:41 INFO - Connected to following servers:
+2021-07-01 16:46:42 INFO - Testys 587666101509554211
+2021-07-01 16:46:42 INFO - Status changed to "Playing $help"
+2021-07-01 16:46:43 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:46:44 ERROR - Error running getMarsPhoto write() argument must be str, not dict
+2021-07-01 16:47:27 --------------
+2021-07-01 16:47:27 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:47:27 INFO - ID: 811567642799243295
+2021-07-01 16:47:27 INFO - Discord Version: 1.6.0
+2021-07-01 16:47:27 INFO - Script Version: v0.4.0
+2021-07-01 16:47:27 INFO - Prefix: $
+2021-07-01 16:47:27 INFO - Connected to following servers:
+2021-07-01 16:47:27 INFO - Testys 587666101509554211
+2021-07-01 16:47:27 INFO - Status changed to "Playing $help"
+2021-07-01 16:47:34 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:47:35 INFO - Manifest data retrieved successfully.
+2021-07-01 16:47:35 ERROR - Error running getMarsPhoto 'photos'
+2021-07-01 16:49:04 --------------
+2021-07-01 16:49:04 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:49:04 INFO - ID: 811567642799243295
+2021-07-01 16:49:04 INFO - Discord Version: 1.6.0
+2021-07-01 16:49:04 INFO - Script Version: v0.4.0
+2021-07-01 16:49:04 INFO - Prefix: $
+2021-07-01 16:49:04 INFO - Connected to following servers:
+2021-07-01 16:49:04 INFO - Testys 587666101509554211
+2021-07-01 16:49:04 INFO - Status changed to "Playing $help"
+2021-07-01 16:49:11 INFO - Big Spender#7291 used $mars o f
+2021-07-01 16:49:12 INFO - Manifest data retrieved successfully.
+2021-07-01 16:49:12 WARNING - FHAZ not available for Opportunity, available cameras ['PANCAM'].
+2021-07-01 16:51:32 --------------
+2021-07-01 16:51:32 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:51:32 INFO - ID: 811567642799243295
+2021-07-01 16:51:32 INFO - Discord Version: 1.6.0
+2021-07-01 16:51:32 INFO - Script Version: v0.4.0
+2021-07-01 16:51:32 INFO - Prefix: $
+2021-07-01 16:51:32 INFO - Connected to following servers:
+2021-07-01 16:51:32 INFO - Testys 587666101509554211
+2021-07-01 16:51:32 INFO - Status changed to "Playing $help"
+2021-07-01 16:52:44 --------------
+2021-07-01 16:52:44 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 16:52:44 INFO - ID: 811567642799243295
+2021-07-01 16:52:44 INFO - Discord Version: 1.6.0
+2021-07-01 16:52:44 INFO - Script Version: v0.4.0
+2021-07-01 16:52:44 INFO - Prefix: $
+2021-07-01 16:52:44 INFO - Connected to following servers:
+2021-07-01 16:52:44 INFO - Testys 587666101509554211
+2021-07-01 16:52:44 INFO - Status changed to "Playing $help"
+2021-07-01 16:55:23 INFO - Big Spender#7291 used $mars c n
+2021-07-01 16:55:26 INFO - Manifest data retrieved successfully.
+2021-07-01 16:55:26 INFO - Photo data retrieved successfully.
+2021-07-01 16:55:26 INFO - Sent Mars image from Curiosity NAVCAM on 2021-06-29
+2021-07-01 17:01:19 --------------
+2021-07-01 17:01:19 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 17:01:19 INFO - ID: 811567642799243295
+2021-07-01 17:01:19 INFO - Discord Version: 1.6.0
+2021-07-01 17:01:19 INFO - Script Version: v0.4.0
+2021-07-01 17:01:19 INFO - Prefix: $
+2021-07-01 17:01:19 INFO - Connected to following servers:
+2021-07-01 17:01:19 INFO - Testys 587666101509554211
+2021-07-01 17:01:19 INFO - Status changed to "Playing $help"
+2021-07-01 17:01:22 INFO - Big Spender#7291 used $mars c n
+2021-07-01 17:01:23 INFO - Manifest data retrieved successfully.
+2021-07-01 17:01:24 INFO - Photo data retrieved successfully.
+2021-07-01 17:01:24 INFO - Sent Mars image
+2021-07-01 17:03:52 --------------
+2021-07-01 17:03:52 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 17:03:52 INFO - ID: 811567642799243295
+2021-07-01 17:03:52 INFO - Discord Version: 1.6.0
+2021-07-01 17:03:52 INFO - Script Version: v0.4.0
+2021-07-01 17:03:52 INFO - Prefix: $
+2021-07-01 17:03:52 INFO - Connected to following servers:
+2021-07-01 17:03:52 INFO - Testys 587666101509554211
+2021-07-01 17:03:52 INFO - Status changed to "Playing $help"
+2021-07-01 17:03:53 INFO - Big Spender#7291 used $mars c n
+2021-07-01 17:03:54 INFO - Manifest data retrieved successfully.
+2021-07-01 17:03:54 INFO - Photo data retrieved successfully.
+2021-07-01 17:03:54 INFO - Sent Mars image
+2021-07-01 17:04:53 INFO - Big Spender#7291 used $mars c f
+2021-07-01 17:04:54 INFO - Manifest data retrieved successfully.
+2021-07-01 17:04:54 INFO - Photo data retrieved successfully.
+2021-07-01 17:04:55 INFO - Sent Mars image
+2021-07-01 17:05:04 INFO - Big Spender#7291 used $mars c r
+2021-07-01 17:05:05 INFO - Manifest data retrieved successfully.
+2021-07-01 17:05:05 INFO - Photo data retrieved successfully.
+2021-07-01 17:05:05 INFO - Sent Mars image
+2021-07-01 17:05:11 INFO - Big Spender#7291 used $mars o n
+2021-07-01 17:05:12 INFO - Manifest data retrieved successfully.
+2021-07-01 17:05:12 WARNING - NAVCAM not available for Opportunity, available cameras ['PANCAM'].
+2021-07-01 17:05:18 INFO - Big Spender#7291 used $mars o f
+2021-07-01 17:05:19 INFO - Manifest data retrieved successfully.
+2021-07-01 17:05:19 WARNING - FHAZ not available for Opportunity, available cameras ['PANCAM'].
+2021-07-01 17:07:33 --------------
+2021-07-01 17:07:33 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 17:07:33 INFO - ID: 811567642799243295
+2021-07-01 17:07:33 INFO - Discord Version: 1.6.0
+2021-07-01 17:07:33 INFO - Script Version: v0.4.0
+2021-07-01 17:07:33 INFO - Prefix: $
+2021-07-01 17:07:33 INFO - Connected to following servers:
+2021-07-01 17:07:33 INFO - Testys 587666101509554211
+2021-07-01 17:07:33 INFO - Status changed to "Playing $help"
+2021-07-01 17:07:55 INFO - Big Spender#7291 used $mars s n
+2021-07-01 17:07:57 INFO - Manifest data retrieved successfully.
+2021-07-01 17:07:57 WARNING - NAVCAM not available for Spirit, available cameras ['PANCAM'].
+2021-07-01 17:08:44 --------------
+2021-07-01 17:08:44 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 17:08:44 INFO - ID: 811567642799243295
+2021-07-01 17:08:44 INFO - Discord Version: 1.6.0
+2021-07-01 17:08:44 INFO - Script Version: v0.4.0
+2021-07-01 17:08:44 INFO - Prefix: $
+2021-07-01 17:08:44 INFO - Connected to following servers:
+2021-07-01 17:08:44 INFO - Testys 587666101509554211
+2021-07-01 17:08:44 INFO - Status changed to "Playing $help"
+2021-07-01 17:08:46 INFO - Big Spender#7291 used $mars s p
+2021-07-01 17:08:46 INFO - Incorrect arg supplied in $mars
+2021-07-01 17:09:55 --------------
+2021-07-01 17:09:55 INFO - Logged in as: BigSpenderTestBot
+2021-07-01 17:09:55 INFO - ID: 811567642799243295
+2021-07-01 17:09:55 INFO - Discord Version: 1.6.0
+2021-07-01 17:09:55 INFO - Script Version: v0.4.0
+2021-07-01 17:09:55 INFO - Prefix: $
+2021-07-01 17:09:55 INFO - Connected to following servers:
+2021-07-01 17:09:55 INFO - Testys 587666101509554211
+2021-07-01 17:09:55 INFO - Status changed to "Playing $help"
+2021-07-01 17:09:56 INFO - Big Spender#7291 used $mars s p
+2021-07-01 17:09:57 INFO - Manifest data retrieved successfully.
+2021-07-01 17:09:58 INFO - Photo data retrieved successfully.
+2021-07-01 17:09:58 INFO - Sent Mars image
+2021-07-01 17:10:14 INFO - Big Spender#7291 used $mars o p
+2021-07-01 17:10:15 INFO - Manifest data retrieved successfully.
+2021-07-01 17:10:16 INFO - Photo data retrieved successfully.
+2021-07-01 17:10:16 INFO - Sent Mars image
+2021-07-01 17:10:26 INFO - Big Spender#7291 used $mars c p
+2021-07-01 17:10:27 INFO - Manifest data retrieved successfully.
+2021-07-01 17:10:27 WARNING - PANCAM not available for Curiosity, available cameras ['CHEMCAM', 'FHAZ', 'NAVCAM', 'RHAZ'].
