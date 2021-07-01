@@ -27,7 +27,7 @@ async def afterReady(status=False):
 
         log("INFO - Connected to following servers:")
         for guild in bot.guilds:
-            log("- " + guild.name + " " + str(guild.id))
+            log("INFO - " + guild.name + " " + str(guild.id))
             
         game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
@@ -42,8 +42,6 @@ async def afterReady(status=False):
 
 
 #########################################################################################
-
-
 class commandNews(commands.Cog, name="News"):
     def __init__(self, bot):
         self.bot = bot
@@ -129,7 +127,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
 
 
 
-class commandAPOD(commands.Cog, name="Pictures"):
+class commandPhotos(commands.Cog, name="Pictures"):
     def __init__(self, bot):
         self.bot = bot
 
@@ -160,8 +158,7 @@ class commandAPOD(commands.Cog, name="Pictures"):
                                             
                                         await ctx.send("Today's Astronomy Picture Of the Day is a video.")
                                         await ctx.send(data['url'])
-                                        jsonFile.close()
-                                        
+                                        jsonFile.close()                                        
 
                                     #if the media is an image, then embed it with a title
                                     elif data['mediaType'] == "image":
@@ -171,17 +168,13 @@ class commandAPOD(commands.Cog, name="Pictures"):
 
                                         file = discord.File(apodFile, filename="image.png")
                                         
-                                        embed = discord.Embed(title=picTitle)
-                                        
-                                        
+                                        embed = discord.Embed(title=picTitle)                                       
                                         embed.set_image(url="attachment://image.png")
                                         embed.set_footer(text=data['explanation'])
                                         jsonFile.close()
-
                                         await ctx.send(file=file, embed=embed)
                                         
-                                        
-                                    
+
                                     #edge case where mediaType is neither video or image
                                     else:
                                         await ctx.send("Unable to send APOD, invalid media type")
@@ -196,7 +189,49 @@ class commandAPOD(commands.Cog, name="Pictures"):
             except Exception as e:
                 log("ERROR - Error running commandAPOD")
                 log(str(e))
+
+
+    
+    @commands.command(name="mars", brief="Shows photos from Mars", help="""Shows the latest photo from Mars from either Curiosity, Opportunity or Spirit. \nUse ?mars <craft> <camera>. Craft is either "c", "o" or "s" for Curiosity, Opportunity or Spirit. \nCamera is either "f", "r", "n" or "p" for Front, Rear, Navigation or Panoramic camera on board""")
         
+    async def mars(self, ctx, craftArg=None, camArg=None):
+        if not ctx.author.bot:
+            async with ctx.typing():
+
+                log(f"INFO - {ctx.author} used {spaceBotConfig.discordPrefix}mars {craftArg} {camArg}")
+
+                photoEmbed = getMarsPhoto(craftArg, camArg)
+                
+                if photoEmbed == "craftArg fail":
+                    await ctx.send("Please send a correct Craft argument")
+                elif photoEmbed == "camArg fail":
+                    await ctx.send("Please send a correct Camera argument")
+                elif photoEmbed == "availCam fail":
+                    await ctx.send("This camera is not available for this craft.")
+                elif photoEmbed == "manifestUrl fail":
+                    await ctx.send("Problem retrieving manifest")
+                elif photoEmbed == "photoUrl fail":
+                    await ctx.send("Problem retrieving Photo")
+                elif photoEmbed == "wrong arg":
+                    await ctx.send("Please send correct arguments.")
+                elif photoEmbed == "missing arg":
+                    await ctx.send("Please send correct arguments.")
+                elif photoEmbed is None:
+                    await ctx.send("Error retrieving photo.")
+                    log("ERROR - mars photoEmbed was none.")
+
+                else:
+                    
+                    photoLink = photoEmbed[0]
+                    photoDate = photoEmbed[1]
+                    photoCraft = photoEmbed[2]
+                                                         
+                    embed = discord.Embed(title=f"Photo from {photoCraft} on {photoDate}")
+                    embed.set_image(url=photoLink)
+                    await ctx.send(embed=embed)            
+                    log(f"INFO - Sent Mars image")
+                    
+                
 
 
 class commandSF(commands.Cog, name="Facts"):
@@ -267,6 +302,86 @@ class commandAstros(commands.Cog, name="Astronauts"):
                 log(str(e))
 
 #########################################################################################
+
+def getMarsPhoto(craftArg=None, camArg=None):
+    
+    try:
+        if not craftArg == None and not camArg == None: #check that the arguments have been supplied
+
+            crafts = spaceBotConfig.crafts
+            cams = spaceBotConfig.cams
+
+            if craftArg in crafts and camArg in cams: #check that the arguments supplied are correct
+
+                if craftArg == "c": craft = "Curiosity"
+                elif craftArg == "o": craft = "Opportunity"
+                elif craftArg == "s": craft = "Spirit"
+                else:
+                    log(f"INFO - Incorrect craftArg supplied - {craftArg}")
+                    return "craftArg fail"
+
+                if camArg == "f": cam = "FHAZ"
+                elif camArg == "r": cam = "RHAZ"
+                elif camArg == "n": cam = "NAVCAM"
+                elif camArg == "p": cam = "PANCAM"
+                else:
+                    log(f"INFO - Incorrect camArg supplied - {camArg}")
+                    return "camArg fail"
+                    
+                
+
+                manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/{craft}?api_key={spaceBotTokens.NASAApiKey}"
+                #get last photo date - maxSol
+                with urllib.request.urlopen(manifestUrl) as mUrl:
+                    
+                    data = json.loads(mUrl.read().decode())
+                    with open("file.txt", "w") as file:
+                        file.write(str(data))
+
+                    if data is not None: #check that we actually got data back
+
+                        log("INFO - Manifest data retrieved successfully.")
+                        maxSol = data['photo_manifest']['max_sol']
+                        availCams = data['photo_manifest']['photos'][-1]['cameras']
+
+                        if cam not in availCams: #if the chosen camera is not available this time.
+                            log(f"WARNING - {cam} not available for {craft}, available cameras {availCams}.")
+                            return "availCam fail"
+                        
+                            
+                    else:
+                        log(f"ERROR - No data returned from manifestUrl.")
+                        return "manifestUrl fail"
+                        
+
+
+
+                photoUrl = f"https://api.nasa.gov/mars-photos/api/v1/rovers/{craft}/photos?camera={cam}&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
+                with urllib.request.urlopen(photoUrl) as pUrl:
+                    data = json.loads(pUrl.read().decode())
+                    if data is not None:
+                        log("INFO - Photo data retrieved successfully.")
+                        photoDate = data['photos'][-1]['earth_date']
+                        photoLink = data['photos'][-1]['img_src']
+                        
+                    else:
+                        log(f"ERROR - No data returned from photoUrl.")
+                        return "photoUrl fail"
+
+                return photoLink, photoDate, craft
+
+            else: 
+                log(f"INFO - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
+                return "wrong arg"
+                               
+        
+        else:
+            log(f"INFO - Missing arg in {spaceBotConfig.discordPrefix}mars")
+            return "missing arg"
+
+    except Exception as e:
+        log(f"ERROR - Error running getMarsPhoto {e}")
+
 
 #Astronomy Picture of the Day helper function, does API calls.
 def getAPOD():
@@ -500,7 +615,7 @@ def log(text):
 
 #########################################################################################
 #add cogs
-bot.add_cog(commandAPOD(bot))
+bot.add_cog(commandPhotos(bot))
 bot.add_cog(commandAstros(bot))
 bot.add_cog(commandISS(bot))
 bot.add_cog(commandPW(bot))
