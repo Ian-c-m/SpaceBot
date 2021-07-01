@@ -18,7 +18,8 @@ Created by Big Spender#7291
 | ?iss |  | Gives the live location of the International Space Station. |
 | ?news | | Shows today's space news |
 | ?apod | | Shows NASA's Astronomy Picture of the Day |
-| ?pw | planet name e.g. ?pw mars | Gives information on a planet's weather. |
+|?mars | <craft> <camera> e.g. ?mars c n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
+| ?pw | <planet> e.g. ?pw mars | Gives information on a planet's weather. |
 
 ## Current Features
 - Space People (astronauts!)
@@ -31,7 +32,7 @@ Created by Big Spender#7291
 ## Future Features
 - [ ] More facts
 - [ ] Space Launches
-- [ ] Mars Rover Pictures
+- [X] Mars Rover Pictures
 
 ## Permissions Needed
 * Send Messages
