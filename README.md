@@ -18,11 +18,11 @@ Created by Big Spender#7291
 | ?iss |  | Gives the live location of the International Space Station. |
 | ?news | | Shows today's space news |
 | ?apod | | Shows NASA's Astronomy Picture of the Day |
-|?mars | <craft> <camera> e.g. ?mars c n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
+|?mars | <camera> e.g. ?mars n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
 | ?pw | <planet> e.g. ?pw mars | Gives information on a planet's weather. |
 
 ## Current Features
-- Space People (astronauts!)
+- Space People (Astronauts!)
 - Space Facts
 - Space Stations
 - Space News
@@ -40,3 +40,6 @@ Created by Big Spender#7291
 * Attach Files
 * Add Reactions (not currently used)
 
+## Intents
+* Guilds
+* Messages

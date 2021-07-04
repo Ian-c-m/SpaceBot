@@ -3,9 +3,11 @@ from json.decoder import JSONDecodeError
 from discord.ext import commands
 from datetime import datetime
 
+neededIntents = discord.Intents(guilds=True, messages=True)
 
-#uses either prefix or @ mention to activate
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix))
+#uses either prefix or @ mention to activate, passes intents needed to function as well.
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
+
 
 
 #called when successfully logged into Discord API. Don't do any API calls in here though.
@@ -13,47 +15,64 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.disc
 async def on_ready():
     await afterReady(True)
 
+#called when joining/invited to a guild
+@bot.event
+async def on_guild_join(guild):
+    log(f"INFO - guild - Got invited to {guild.name}, {guild.id}")
+
+#called when kicked/banned from a guild
+@bot.event
+async def on_guild_remove(guild):
+    log(f"INFO - guild - Removed from {guild.name}, {guild.id}")
+
+
 
 #sets up logging and changes status
 async def afterReady(status=False):
     
     if status == True:
         log("--------------")
-        log(f"INFO - Logged in as: {bot.user.name}")
-        log(f"INFO - ID: {bot.user.id}")
-        log(f"INFO - Discord Version: {discord.__version__}")
-        log(f"INFO - Script Version: {spaceBotConfig.scriptVersion}")
-        log(f"INFO - Prefix: {spaceBotConfig.discordPrefix}")
+        log(f"INFO - afterReady - Logged in as: {bot.user.name}")
+        log(f"INFO - afterReady - ID: {bot.user.id}")
+        log(f"INFO - afterReady - Discord Version: {discord.__version__}")
+        log(f"INFO - afterReady - Script Version: {spaceBotConfig.scriptVersion}")
+        log(f"INFO - afterReady - Prefix: {spaceBotConfig.discordPrefix}")
 
-        log("INFO - Connected to following servers:")
+        log("INFO - afterReady - Connected to following servers:")
         for guild in bot.guilds:
-            log("INFO - " + guild.name + " " + str(guild.id))
+            log(f"INFO - afterReady - Name: {guild.name}, ID: {guild.id}")
             
         game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
         
-        log(f"INFO - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")        
+        log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")        
         print("Space Bot Ready")
 
     else:
-        log("ERROR - afterReady called, but was not ready")
+        log("ERROR - afterReady - afterReady called, but was not ready")
         print("afterReady called, but was not ready")
         return
 
 
 #########################################################################################
+#   COMMAND FUNCTIONS BELOW
+
+
 class commandNews(commands.Cog, name="News"):
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command(name="news", brief = "Gets space news", help="Gets today's space news. Courtesy of space.com")
     async def news(self, ctx):
+        log(f"INFO - news - {ctx.author} used {spaceBotConfig.discordPrefix}news")
         #could be slow at getting stuff from rss feed, so show that bot is responding.
         with ctx.typing():
 
             news = getNews()
-            if news is False:
-                await ctx.send("Unable to gather news.")
+            if news == "error":
+                await ctx.send("Unable to gather news for today.")
+            elif news == "no news":
+                await ctx.send("No news for today yet. Try later.")
             else:
                 await ctx.send(embed=news)                               
                                         
@@ -67,32 +86,39 @@ class commandISS(commands.Cog, name="ISS"):
     @commands.command(name="iss", brief="Finds the ISS", help="Shows current location of the International Space Station. Courtesy of open-notify.org")
     async def iss(self, ctx):
         if not ctx.author.bot:
-            log(f"INFO - {ctx.author} used ISS command")
+
+            log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}iss")
+            
             async with ctx.typing():
+
                 iss = getISS()
-                lat = iss[0]
-                lon = iss[1]
-                response = f"Current position: {lat}, {lon}"
-                await ctx.send(response)
-                mapLink=f"https://www.google.com/maps/place/{lat},{lon}"
-                await ctx.send(mapLink)
+
+                if iss is False:
+                    await ctx.send("Unable to find the ISS.")
+                else:
+                    lat = iss[0]
+                    lon = iss[1]
+                    response = f"Current position: {lat}, {lon}"
+                    await ctx.send(response)
+                    mapLink=f"https://www.google.com/maps/place/{lat},{lon}"
+                    await ctx.send(mapLink)
 
 
 class commandPW(commands.Cog, name="Planet Weather"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="pw", brief="Different Planet's Weather", help="Weather forecast for a given planet in our solar system. \nTry ?pw pluto")
-    async def weather(self, ctx, planetName):
+    @commands.command(name="pw", brief="Different Planet's Weather", help=f"Weather forecast for a given planet in our solar system. \nTry {spaceBotConfig.discordPrefix}pw pluto")
+    async def weather(self, ctx, planetName=None):
         if not ctx.author.bot:
             try:
-                
-                log(f"INFO - {ctx.author} used PW command")
-                    
-                planet = str(planetName).lower()
+                planet = ""
+                log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}pw {planetName}")
+                if planetName is not None:
+                    planet = str(planetName).lower()
 
                 #picks a random planet from the list
-                if planet == "random":
+                if planet == "random" or planetName is None:
                     listPlanets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
                     planet = random.choice(listPlanets)
 
@@ -116,14 +142,14 @@ class commandPW(commands.Cog, name="Planet Weather"):
                 elif planet ==  "pluto":
                     message = "Pluto averages -388°F (-233°C). I'm still annoyed that it's not a planet."
                 else:
-                    log("ERROR - Unknown planet")
+                    log("ERROR - pw - Unknown planet")
                     message = "Unknown planet! Try again..."
 
                 await ctx.send(message)
 
             except Exception as e:
-                log("ERROR - Error running commandPW")
-                log(str(e))
+                log(f"ERROR - pw - Error running commandPW. {e}")
+                
 
 
 
@@ -137,15 +163,13 @@ class commandPhotos(commands.Cog, name="Pictures"):
             try:
                 #shows the ... typing animation until the message gets sent. shows that the bot has not ignored the request
                 async with ctx.typing():
-                    log(f"INFO - {ctx.author} used APOD command")
-                    result = getAPOD()
+                    log(f"INFO - apod - {ctx.author} used {spaceBotConfig.discordPrefix}apod")
 
+                    result = getAPOD()
 
                     #APOD() got an error when running
                     if result == "api fail":
                         await ctx.send("Unable to get Astronomy Picture Of the Day.")
-                        
-
                     
                     else:
                     #no error with APOD(), so send data
@@ -178,29 +202,28 @@ class commandPhotos(commands.Cog, name="Pictures"):
                                     #edge case where mediaType is neither video or image
                                     else:
                                         await ctx.send("Unable to send APOD, invalid media type")
-                                        log(f"ERROR - Unable to send APOD, media type is {data['mediaType']}")
+                                        log(f"ERROR - apod - Unable to send APOD, media type is {data['mediaType']}")
                                 
 
                                 except JSONDecodeError:
-                                    log("ERROR - apoddata.txt was empty in commandAPOD")
+                                    log("ERROR - apod - apoddata.txt was empty in commandAPOD")
                                     await ctx.send("Unable to send APOD, no data.")
 
 
             except Exception as e:
-                log("ERROR - Error running commandAPOD")
-                log(str(e))
+                log(f"ERROR - apod - Error running commandAPOD. {e}")
 
 
     
-    @commands.command(name="mars", brief="Shows photos from Mars", help="""Shows the latest photo from Mars from either Curiosity, Opportunity or Spirit. \nUse ?mars <craft> <camera>. Craft is either "c", "o" or "s" for Curiosity, Opportunity or Spirit. \nCamera is either "f", "r", "n" or "p" for Front, Rear, Navigation or Panoramic camera on board""")
+    @commands.command(name="mars", brief="Shows photos from Mars", help="""Shows the latest photo from Mars from Curiosity. \nUse ?mars <camera>. Camera is either "f", "r", "m" or "n" for Front, Rear, Mast or Navigation cameras on board""")
         
-    async def mars(self, ctx, craftArg=None, camArg=None):
+    async def mars(self, ctx, camArg=None):
         if not ctx.author.bot:
             async with ctx.typing():
 
-                log(f"INFO - {ctx.author} used {spaceBotConfig.discordPrefix}mars {craftArg} {camArg}")
+                log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars {camArg}")
 
-                photoEmbed = getMarsPhoto(craftArg, camArg)
+                photoEmbed = getMarsPhoto(camArg)
                 
                 if photoEmbed == "craftArg fail":
                     await ctx.send("Please send a correct Craft argument")
@@ -218,18 +241,19 @@ class commandPhotos(commands.Cog, name="Pictures"):
                     await ctx.send("Please send correct arguments.")
                 elif photoEmbed is None:
                     await ctx.send("Error retrieving photo.")
-                    log("ERROR - mars photoEmbed was none.")
+                    log("ERROR - mars - photoEmbed was none.")
 
                 else:
                     
                     photoLink = photoEmbed[0]
                     photoDate = photoEmbed[1]
-                    photoCraft = photoEmbed[2]
+                    photoCamera = photoEmbed[2]
+
                                                          
-                    embed = discord.Embed(title=f"Photo from {photoCraft} on {photoDate}")
+                    embed = discord.Embed(title=f"Photo from Curiosity's {photoCamera} on {photoDate}")
                     embed.set_image(url=photoLink)
                     await ctx.send(embed=embed)            
-                    log(f"INFO - Sent Mars image")
+                    log(f"INFO - mars - Sent Mars image")
                     
                 
 
@@ -243,7 +267,7 @@ class commandSF(commands.Cog, name="Facts"):
         if not ctx.author.bot:
             try:
 
-                log(f"INFO - {ctx.author} used SF command")
+                log(f"INFO - facts - {ctx.author} used {spaceBotConfig.discordPrefix}facts")
 
                 #a list of facts            
                 lines = open("facts.txt").read().splitlines()
@@ -253,7 +277,7 @@ class commandSF(commands.Cog, name="Facts"):
 
                 
             except Exception as e:
-                log("ERROR - Error running commandSF")
+                log("ERROR - facts - Error running commandSF")
                 log(str(e))
 
 
@@ -265,9 +289,11 @@ class commandAstros(commands.Cog, name="Astronauts"):
     @commands.command(name="astros", brief="Astronauts!", help="Shows the number of astronauts in space. Courtesy of open-notify.org")
     async def astros(self, ctx):
         if not ctx.author.bot:
+
+            log(f"INFO - astros - {ctx.author} used {spaceBotConfig.discordPrefix}astros")
+            
             try:
                 async with ctx.typing():
-                    log(f"INFO - {ctx.author} used Astros command")
                     
                     #updates astros data if neccessary
                     getAstros()                 
@@ -298,41 +324,43 @@ class commandAstros(commands.Cog, name="Astronauts"):
 
                 
             except Exception as e:
-                log("ERROR - Error running commandAstros")
+                log("ERROR - astros - Error running commandAstros")
                 log(str(e))
 
-#########################################################################################
 
-def getMarsPhoto(craftArg=None, camArg=None):
+#########################################################################################
+#    HELPER FUNCTIONS BELOW
+
+def getMarsPhoto(camArg=None):
     
     try:
-        if not craftArg == None and not camArg == None: #check that the arguments have been supplied
-
-            crafts = spaceBotConfig.crafts
+        if not camArg == None: #check that the arguments have been supplied
+            
             cams = spaceBotConfig.cams
 
-            if craftArg in crafts and camArg in cams: #check that the arguments supplied are correct
-
-                if craftArg == "c": craft = "Curiosity"
-                elif craftArg == "o": craft = "Opportunity"
-                elif craftArg == "s": craft = "Spirit"
-                else:
-                    log(f"INFO - Incorrect craftArg supplied - {craftArg}")
-                    return "craftArg fail"
+            if camArg in cams: #check that the arguments supplied are correct
 
                 if camArg == "f": cam = "FHAZ"
                 elif camArg == "r": cam = "RHAZ"
                 elif camArg == "n": cam = "NAVCAM"
-                elif camArg == "p": cam = "PANCAM"
+                elif camArg == "m": cam = "MAST"
                 else:
-                    log(f"INFO - Incorrect camArg supplied - {camArg}")
+                    log(f"WARNING - getMarsPhoto - Incorrect camArg supplied - {camArg}")
                     return "camArg fail"
                     
                 
 
-                manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/{craft}?api_key={spaceBotTokens.NASAApiKey}"
+                manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/Curiosity?api_key={spaceBotTokens.NASAApiKey}"
                 #get last photo date - maxSol
                 with urllib.request.urlopen(manifestUrl) as mUrl:
+
+                    #checking remaining API limits
+                    headers = mUrl.headers
+                    hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
+                    #log(f"INFO - X-RateLimit-Limit = {headers['X-RateLimit-Limit']}. X-RateLimit-Remaining = {headers['X-RateLimit-Remaining']}")
+                    if hourlyLmitRemaining <= 100:
+                        log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+
                     
                     data = json.loads(mUrl.read().decode())
                     with open("file.txt", "w") as file:
@@ -340,53 +368,63 @@ def getMarsPhoto(craftArg=None, camArg=None):
 
                     if data is not None: #check that we actually got data back
 
-                        log("INFO - Manifest data retrieved successfully.")
+                        log("INFO - getMarsPhoto - Manifest data retrieved successfully.")
                         maxSol = data['photo_manifest']['max_sol']
                         availCams = data['photo_manifest']['photos'][-1]['cameras']
 
                         if cam not in availCams: #if the chosen camera is not available this time.
-                            log(f"WARNING - {cam} not available for {craft}, available cameras {availCams}.")
+                            log(f"WARNING - getMarsPhoto - {cam} not available for Curiosity, available cameras {availCams}.")
                             return "availCam fail"
                         
                             
                     else:
-                        log(f"ERROR - No data returned from manifestUrl.")
+                        log(f"ERROR - getMarsPhoto - No data returned from manifestUrl.")
                         return "manifestUrl fail"
                         
 
 
 
-                photoUrl = f"https://api.nasa.gov/mars-photos/api/v1/rovers/{craft}/photos?camera={cam}&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
+                photoUrl = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera={cam}&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
                 with urllib.request.urlopen(photoUrl) as pUrl:
+
                     data = json.loads(pUrl.read().decode())
+
+                    #checking remaining API limits
+                    headers = pUrl.headers
+                    hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
+                    #log(f"INFO - X-RateLimit-Limit = {headers['X-RateLimit-Limit']}. X-RateLimit-Remaining = {headers['X-RateLimit-Remaining']}")
+                    if hourlyLmitRemaining <= 100:
+                        log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+
                     if data is not None:
-                        log("INFO - Photo data retrieved successfully.")
+                        log("INFO - getMarsPhoto - Photo data retrieved successfully.")
                         photoDate = data['photos'][-1]['earth_date']
                         photoLink = data['photos'][-1]['img_src']
                         
                     else:
-                        log(f"ERROR - No data returned from photoUrl.")
+                        log(f"ERROR - getMarsPhoto - No data returned from photoUrl.")
                         return "photoUrl fail"
 
-                return photoLink, photoDate, craft
+                return photoLink, photoDate, cam
 
             else: 
-                log(f"INFO - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
+                log(f"INFO - getMarsPhoto - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
                 return "wrong arg"
                                
         
         else:
-            log(f"INFO - Missing arg in {spaceBotConfig.discordPrefix}mars")
+            log(f"INFO - getMarsPhoto - Missing arg in {spaceBotConfig.discordPrefix}mars")
             return "missing arg"
 
     except Exception as e:
-        log(f"ERROR - Error running getMarsPhoto {e}")
+        log(f"ERROR - getMarsPhoto - Error running getMarsPhoto {e}")
 
 
 #Astronomy Picture of the Day helper function, does API calls.
 def getAPOD():
     try:
-
+        
+        #check the last time we got the photo
         with open("apoddata.txt", "r") as jsonFile:
             try:
                 metadata = json.load(jsonFile)
@@ -395,7 +433,7 @@ def getAPOD():
 
             #if file is empty, then set a default value
             except JSONDecodeError:
-                log("INFO - apoddata.txt was empty")
+                log("WARNING - getAPOD - apoddata.txt was empty")
                 lastRun = None
 
             jsonFile.close()
@@ -405,17 +443,23 @@ def getAPOD():
         #need to fetch new apod if it hasn't been done today        
         if lastRun != dateToday or lastRun is None:
         
-            log("INFO - Fetching new image for today")
+            log("INFO - getAPOD - Fetching new image for today")
             lastRun = datetime.today().strftime('%Y-%m-%d')
             
             ApodUrl = f"https://api.nasa.gov/planetary/apod?api_key={spaceBotTokens.NASAApiKey}"
 
-            with urllib.request.urlopen(ApodUrl) as surl:
-                data = json.loads(surl.read().decode())
+            with urllib.request.urlopen(ApodUrl) as sUrl:
+                data = json.loads(sUrl.read().decode())
+
+                #checking remaining API limits
+                headers = sUrl.headers
+                hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
+                #log(f"INFO - getAPOD - X-RateLimit-Limit = {headers['X-RateLimit-Limit']}. X-RateLimit-Remaining = {headers['X-RateLimit-Remaining']}")
+                if hourlyLmitRemaining <= 100:
+                    log(f"WARNING - getAPOD - Only {hourlyLmitRemaining}/1000 requests left this hour.")
 
                 #check that we actually got a response from the API
                 if data is not None:
-
                     #check if media is a video
                     if data['media_type'] == "video":
                         vidUrl = data['url']
@@ -458,27 +502,27 @@ def getAPOD():
                         return
 
                     else:
-                        log(f"ERROR - APOD was not an image or video, instead was {data['media_type']}")
+                        log(f"ERROR - getAPOD - APOD was not an image or video, instead was {data['media_type']}")
                         return "api fail"
 
                     
                 else:
-                    log("ERROR - Failed to get APOD")
+                    log("ERROR - getAPOD - Failed to get APOD")
                     return "api fail"
 
             
         else:            
-            log("INFO - Skipping fetching new image, as still same date")
+            log("INFO - getAPOD - Skipping fetching new image, as still same date")
             return
         
     #if the file doesn't exist, then create it for next time.
     except IOError:
         with open("apoddata.txt", "w") as jsonFile:
             jsonFile.close()
-        log("INFO - apoddata.txt does not exist, created it.")
+        log("INFO - getAPOD - apoddata.txt does not exist, created it.")
 
     except Exception as e:
-        log("ERROR - Failed to run getAPOD")
+        log("ERROR - getAPOD - Failed to run getAPOD")
         log(str(e))
   
 
@@ -499,7 +543,7 @@ def getAstros():
             #if file is empty, set a default value.
             except JSONDecodeError:
                 lastRun = None
-                log("INFO - astrosdata.txt was empty")
+                log("INFO - getAstros - astrosdata.txt was empty")
         
 
     #if file does not exist, create it for next time.
@@ -507,7 +551,7 @@ def getAstros():
         with open("astrosdata.txt", "w") as jsonFile: 
             jsonFile.close()
             lastRun = None
-        log("INFO - astrosdata.txt did not exist, created it.")
+        log("INFO - getAstros - astrosdata.txt did not exist, created it.")
                           
     
    
@@ -517,7 +561,7 @@ def getAstros():
     #need to fetch new apod if it hasn't been done today, or has no value.        
     if lastRun != dateToday or lastRun is None:
 
-        log("INFO - Fetching new astros data")
+        log("INFO - getAstros - Fetching new astros data")
         
         lastRun = dateToday
         
@@ -539,11 +583,11 @@ def getAstros():
                     outfile.close()
             
             else:
-                log("ERROR - Failed to getastros")
+                log("ERROR - getAstros - Failed to getastros")
                 return("api fail")
 
     else:
-        log("INFO - Same day, skipping checking API for astros")
+        log("INFO - getAstros - Same day, skipping checking API for astros")
 
 
 
@@ -559,9 +603,9 @@ def getISS():
         return lat, lon
     
     except Exception as e:
-        log("ERROR - Failed to run getISS")
+        log("ERROR - getISS - Failed to run")
         log(str(e))
-        return
+        return False
 
 
 #news helper function. gets today's news from space.com rss feed. returns as discord embed object.
@@ -573,30 +617,41 @@ def getNews():
     month = int(today.strftime("%m"))
     day = int(today.strftime("%d"))
     stringToday = today.strftime("%Y-%m-%d")
-
+    newsCount = 0
     url = "https://www.space.com/feeds/all"
 
     #error catching incase url is down/can't connect
     try:
         newsfeed = feedparser.parse(url)
     except Exception as e:
-        log(f"ERROR - Failed to run getNews, url parsing failed. {e}")
-        return False
+        log(f"ERROR - getNews - Failed to run, url parsing failed. {e}")
+        return "error"
 
     embedTitle = f"Space news for {stringToday}"
     todaysNews = discord.Embed(title=embedTitle)
 
-
+ 
     for entry in newsfeed.entries:
         #only get today's news.
         if entry.published_parsed[0] == year and entry.published_parsed[1] == month and entry.published_parsed[2] == day:
             todaysNews.add_field(name=entry.title, value=entry.link, inline=False)
-
-    return todaysNews
-    
         
-
-#########################################################################################
+        #only want to return 10 news articles at once.
+        if len(todaysNews) == 10:
+            log(f"INFO - getNews - todaysNews is 10")
+            break
+                
+                
+    #check if fields list is empty (implying we have no news for today)
+    if not todaysNews.fields:
+        #no news for today, so return False.
+        log(f"INFO - getNews - No news for {stringToday}.")
+        return "no news"
+        
+    else:
+        #there is news for today, so return the Embed object.
+        return todaysNews
+    
 
 
 def log(text):
@@ -613,7 +668,11 @@ def log(text):
         print("Error with log function")
         print(str(e))
 
+
 #########################################################################################
+#   COG SETUP BELOW
+
+
 #add cogs
 bot.add_cog(commandPhotos(bot))
 bot.add_cog(commandAstros(bot))
