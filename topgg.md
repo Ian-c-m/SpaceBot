@@ -5,11 +5,6 @@
 A Discord bot that has cool space features.
 Created by Big Spender#7291
 
-## Invite link
-https://discord.com/api/oauth2/authorize?client_id=849246857309323284&permissions=51264&scope=bot
-
-## Support discord 
-https://discord.gg/XnAGQSbMYM)
 
 | Command | Parameters | Detail |
 |-|-|-|
