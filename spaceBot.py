@@ -1,6 +1,7 @@
 import discord, requests, urllib, json, random, spaceBotConfig, spaceBotTokens, feedparser, os.path
 from json.decoder import JSONDecodeError
 from discord.ext import commands
+from discord.ext.commands import CommandNotFound
 from datetime import datetime
 
 neededIntents = discord.Intents(guilds=True, messages=True)
@@ -8,17 +9,20 @@ neededIntents = discord.Intents(guilds=True, messages=True)
 #uses either prefix or @ mention to activate, passes intents needed to function as well.
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
 
-
+#########################################################################################
+#    EVENT FUNCTIONS BELOW
 
 #called when successfully logged into Discord API. Don't do any API calls in here though.
 @bot.event
 async def on_ready():
     await afterReady(True)
 
+
 #called when joining/invited to a guild
 @bot.event
 async def on_guild_join(guild):
     log(f"INFO - guild - Got invited to {guild.name}, {guild.id}")
+
 
 #called when kicked/banned from a guild
 @bot.event
@@ -26,11 +30,25 @@ async def on_guild_remove(guild):
     log(f"INFO - guild - Removed from {guild.name}, {guild.id}")
 
 
+#ignore errors when command is not found, otherwise raise the error
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        return
+    else:    
+        raise error
+
+#########################################################################################
+#    STARTUP FUNCTIONS BELOW
 
 #sets up logging and changes status
 async def afterReady(status=False):
+    now = datetime.now()
+    now = now.strftime("%Y-%m-%d %H:%M:%S")
     
     if status == True:
+        
+
         log("--------------")
         log(f"INFO - afterReady - Logged in as: {bot.user.name}")
         log(f"INFO - afterReady - ID: {bot.user.id}")
@@ -45,12 +63,16 @@ async def afterReady(status=False):
         game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
         
-        log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")        
-        print("Space Bot Ready")
+        log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")
+
+        bot.owner_id = spaceBotConfig.ownerID
+        log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
+
+        print(f"{now} - Space Bot Ready")
 
     else:
         log("ERROR - afterReady - afterReady called, but was not ready")
-        print("afterReady called, but was not ready")
+        print(f"{now} - afterReady called, but was not ready")
         return
 
 
@@ -66,16 +88,15 @@ class commandNews(commands.Cog, name="News"):
     async def news(self, ctx):
         log(f"INFO - news - {ctx.author} used {spaceBotConfig.discordPrefix}news")
         #could be slow at getting stuff from rss feed, so show that bot is responding.
-        with ctx.typing():
-
-            news = getNews()
-            if news == "error":
-                await ctx.send("Unable to gather news for today.")
-            elif news == "no news":
-                await ctx.send("No news for today yet. Try later.")
-            else:
-                await ctx.send(embed=news)                               
-                                        
+        #with ctx.typing():
+        await ctx.trigger_typing()
+        news = getNews()
+        if news == "error":
+            await ctx.send("Unable to gather news for today.")
+        elif news == "no news":
+            await ctx.send("No news for today yet. Try later.")
+        else:
+            await ctx.send(embed=news)                                                                
                                         
 
 
@@ -89,19 +110,20 @@ class commandISS(commands.Cog, name="ISS"):
 
             log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}iss")
             
-            async with ctx.typing():
+            #async with ctx.typing():
+            await ctx.trigger_typing()
+            iss = getISS()
 
-                iss = getISS()
+            if iss is False:
+                await ctx.send("Unable to find the ISS.")
+            else:
+                lat = iss[0]
+                lon = iss[1]
+                response = f"Current position: {lat}, {lon}"
+                await ctx.send(response)
+                mapLink=f"https://www.google.com/maps/place/{lat},{lon}"
+                await ctx.send(mapLink)
 
-                if iss is False:
-                    await ctx.send("Unable to find the ISS.")
-                else:
-                    lat = iss[0]
-                    lon = iss[1]
-                    response = f"Current position: {lat}, {lon}"
-                    await ctx.send(response)
-                    mapLink=f"https://www.google.com/maps/place/{lat},{lon}"
-                    await ctx.send(mapLink)
 
 
 class commandPW(commands.Cog, name="Planet Weather"):
@@ -112,6 +134,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
     async def weather(self, ctx, planetName=None):
         if not ctx.author.bot:
             try:
+                await ctx.trigger_typing()
                 planet = ""
                 log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}pw {planetName}")
                 if planetName is not None:
@@ -152,7 +175,6 @@ class commandPW(commands.Cog, name="Planet Weather"):
                 
 
 
-
 class commandPhotos(commands.Cog, name="Pictures"):
     def __init__(self, bot):
         self.bot = bot
@@ -162,52 +184,53 @@ class commandPhotos(commands.Cog, name="Pictures"):
         if not ctx.author.bot:
             try:
                 #shows the ... typing animation until the message gets sent. shows that the bot has not ignored the request
-                async with ctx.typing():
-                    log(f"INFO - apod - {ctx.author} used {spaceBotConfig.discordPrefix}apod")
+                #async with ctx.typing():
+                await ctx.trigger_typing()
+                log(f"INFO - apod - {ctx.author} used {spaceBotConfig.discordPrefix}apod")
 
-                    result = getAPOD()
+                result = getAPOD()
 
-                    #APOD() got an error when running
-                    if result == "api fail":
-                        await ctx.send("Unable to get Astronomy Picture Of the Day.")
-                    
-                    else:
-                    #no error with APOD(), so send data
-                        with open("apoddata.txt", "r") as jsonFile:
-                            metadata = json.load(jsonFile)
-                            for data in metadata:
-                                try:
-                                    #if the media is a video, then just send the url
-                                    if data['mediaType'] == "video":
-                                            
-                                        await ctx.send("Today's Astronomy Picture Of the Day is a video.")
-                                        await ctx.send(data['url'])
-                                        jsonFile.close()                                        
-
-                                    #if the media is an image, then embed it with a title
-                                    elif data['mediaType'] == "image":
-                                        picTitle = data['title']
-                                        extension = data['fileType']
-                                        apodFile = "apod." + extension
-
-                                        file = discord.File(apodFile, filename="image.png")
+                #APOD() got an error when running
+                if result == "api fail":
+                    await ctx.send("Unable to get Astronomy Picture Of the Day.")
+                
+                else:
+                #no error with APOD(), so send data
+                    with open("apoddata.txt", "r") as jsonFile:
+                        metadata = json.load(jsonFile)
+                        for data in metadata:
+                            try:
+                                #if the media is a video, then just send the url
+                                if data['mediaType'] == "video":
                                         
-                                        embed = discord.Embed(title=picTitle)                                       
-                                        embed.set_image(url="attachment://image.png")
-                                        embed.set_footer(text=data['explanation'])
-                                        jsonFile.close()
-                                        await ctx.send(file=file, embed=embed)
-                                        
+                                    await ctx.send("Today's Astronomy Picture Of the Day is a video.")
+                                    await ctx.send(data['url'])
+                                    jsonFile.close()                                        
 
-                                    #edge case where mediaType is neither video or image
-                                    else:
-                                        await ctx.send("Unable to send APOD, invalid media type")
-                                        log(f"ERROR - apod - Unable to send APOD, media type is {data['mediaType']}")
-                                
+                                #if the media is an image, then embed it with a title
+                                elif data['mediaType'] == "image":
+                                    picTitle = data['title']
+                                    extension = data['fileType']
+                                    apodFile = "apod." + extension
 
-                                except JSONDecodeError:
-                                    log("ERROR - apod - apoddata.txt was empty in commandAPOD")
-                                    await ctx.send("Unable to send APOD, no data.")
+                                    file = discord.File(apodFile, filename="image.png")
+                                    
+                                    embed = discord.Embed(title=picTitle)                                       
+                                    embed.set_image(url="attachment://image.png")
+                                    embed.set_footer(text=data['explanation'])
+                                    jsonFile.close()
+                                    await ctx.send(file=file, embed=embed)
+                                    
+
+                                #edge case where mediaType is neither video or image
+                                else:
+                                    await ctx.send("Unable to send APOD, invalid media type")
+                                    log(f"ERROR - apod - Unable to send APOD, media type is {data['mediaType']}")
+                            
+
+                            except JSONDecodeError:
+                                log("ERROR - apod - apoddata.txt was empty in commandAPOD")
+                                await ctx.send("Unable to send APOD, no data.")
 
 
             except Exception as e:
@@ -219,42 +242,46 @@ class commandPhotos(commands.Cog, name="Pictures"):
         
     async def mars(self, ctx, camArg=None):
         if not ctx.author.bot:
-            async with ctx.typing():
-
-                log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars {camArg}")
-
-                photoEmbed = getMarsPhoto(camArg)
+            #async with ctx.typing():
+            await ctx.trigger_typing()
                 
-                if photoEmbed == "craftArg fail":
-                    await ctx.send("Please send a correct Craft argument")
-                elif photoEmbed == "camArg fail":
-                    await ctx.send("Please send a correct Camera argument")
-                elif photoEmbed == "availCam fail":
-                    await ctx.send("This camera is not available for this craft.")
-                elif photoEmbed == "manifestUrl fail":
-                    await ctx.send("Problem retrieving manifest")
-                elif photoEmbed == "photoUrl fail":
-                    await ctx.send("Problem retrieving Photo")
-                elif photoEmbed == "wrong arg":
-                    await ctx.send("Please send correct arguments.")
-                elif photoEmbed == "missing arg":
-                    await ctx.send("Please send correct arguments.")
-                elif photoEmbed is None:
-                    await ctx.send("Error retrieving photo.")
-                    log("ERROR - mars - photoEmbed was none.")
+            log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars {camArg}")
 
-                else:
-                    
-                    photoLink = photoEmbed[0]
-                    photoDate = photoEmbed[1]
-                    photoCamera = photoEmbed[2]
+            photoEmbed = getMarsPhoto(camArg)
 
-                                                         
-                    embed = discord.Embed(title=f"Photo from Curiosity's {photoCamera} on {photoDate}")
-                    embed.set_image(url=photoLink)
-                    await ctx.send(embed=embed)            
-                    log(f"INFO - mars - Sent Mars image")
-                    
+            if photoEmbed == "camArg fail":
+                await ctx.send("Please send a correct Camera argument.")
+
+            elif photoEmbed == "availCam fail":
+                await ctx.send("This camera is not available for this craft.")
+
+            elif photoEmbed == "manifestUrl fail":
+                await ctx.send("Problem retrieving manifest.")
+
+            elif photoEmbed == "photoUrl fail":
+                await ctx.send("Problem retrieving Photo.")
+
+            elif photoEmbed == "wrong arg":
+                await ctx.send("Please send correct arguments.")
+
+            elif photoEmbed == "missing arg":
+                await ctx.send("Please send correct arguments.")
+
+            elif photoEmbed is None:
+                await ctx.send("Error retrieving photo.")
+                log("ERROR - mars - photoEmbed was none.")
+
+            else:
+                
+                photoLink = photoEmbed[0]
+                photoDate = photoEmbed[1]
+                photoCamera = photoEmbed[2]
+
+                                                        
+                embed = discord.Embed(title=f"Photo from Curiosity's {photoCamera} on {photoDate}")
+                embed.set_image(url=photoLink)
+                await ctx.send(embed=embed)            
+                log(f"INFO - mars - Sent Mars image")                  
                 
 
 
@@ -293,33 +320,33 @@ class commandAstros(commands.Cog, name="Astronauts"):
             log(f"INFO - astros - {ctx.author} used {spaceBotConfig.discordPrefix}astros")
             
             try:
-                async with ctx.typing():
-                    
-                    #updates astros data if neccessary
-                    getAstros()                 
+                #async with ctx.typing():
+                await ctx.trigger_typing()   
+                #updates astros data if neccessary
+                getAstros()                 
 
 
-                    #turns json file into pretty text for discord
-                    with open ("astrosjson.txt", "r") as jsonFile:
-                        try:
-                            data = json.load(jsonFile)
-                            numPeople = data['number']
-                            names = data['people']
+                #turns json file into pretty text for discord
+                with open ("astrosjson.txt", "r") as jsonFile:
+                    try:
+                        data = json.load(jsonFile)
+                        numPeople = data['number']
+                        names = data['people']
 
-                            replyDetails = ""
-                            for person in names:
-                                replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
-                                
-                                
-                        #if there is no data in the txt file, then set default values.    
-                        except JSONDecodeError:
-                            jsonFile.close()
-                            numPeople = 0
-                            replyDetails = "Unable to fetch details"
+                        replyDetails = ""
+                        for person in names:
+                            replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
+                            
+                            
+                    #if there is no data in the txt file, then set default values.    
+                    except JSONDecodeError:
+                        jsonFile.close()
+                        numPeople = 0
+                        replyDetails = "Unable to fetch details"
 
-                    #sends the list of people in space and their craft.
-                    await ctx.send(f"There are {numPeople} people in space right now!")
-                    await ctx.send(replyDetails)
+                #sends the list of people in space and their craft.
+                await ctx.send(f"There are {numPeople} people in space right now!")
+                await ctx.send(replyDetails)
 
 
                 
@@ -328,13 +355,33 @@ class commandAstros(commands.Cog, name="Astronauts"):
                 log(str(e))
 
 
+#special command for bot owner only
+class commandAdmin(commands.Cog, name="admin"):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command(name="server", hidden=True)
+    async def serverInfo(self, ctx):
+        
+        if ctx.message.author.id == bot.owner_id:
+            #user is the owner of the bot
+            for guild in bot.guilds:
+                log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
+
+        else:
+            #user is not the owner of the bot
+            return
+
+
+
+
 #########################################################################################
 #    HELPER FUNCTIONS BELOW
 
 def getMarsPhoto(camArg=None):
     
     try:
-        if not camArg == None: #check that the arguments have been supplied
+        if camArg is not None: #check that the arguments have been supplied
             
             cams = spaceBotConfig.cams
 
@@ -409,8 +456,7 @@ def getMarsPhoto(camArg=None):
 
             else: 
                 log(f"INFO - getMarsPhoto - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
-                return "wrong arg"
-                               
+                return "wrong arg"                     
         
         else:
             log(f"INFO - getMarsPhoto - Missing arg in {spaceBotConfig.discordPrefix}mars")
@@ -617,7 +663,7 @@ def getNews():
     month = int(today.strftime("%m"))
     day = int(today.strftime("%d"))
     stringToday = today.strftime("%Y-%m-%d")
-    newsCount = 0
+
     url = "https://www.space.com/feeds/all"
 
     #error catching incase url is down/can't connect
@@ -655,9 +701,12 @@ def getNews():
 
 
 def log(text):
-    try:        
-        now = datetime.now()
-        now = now.strftime("%Y-%m-%d %H:%M:%S ")
+
+    now = datetime.now()
+    now = now.strftime("%Y-%m-%d %H:%M:%S ")
+
+    try:
+        text = str(text)
         with open(spaceBotConfig.fileLog, "a") as log:
             log.write("\n")
             log.write(now)
@@ -665,8 +714,7 @@ def log(text):
             log.close()
             
     except Exception as e:
-        print("Error with log function")
-        print(str(e))
+        print(f"{now} - Error with log function {e}")
 
 
 #########################################################################################
@@ -680,6 +728,7 @@ bot.add_cog(commandISS(bot))
 bot.add_cog(commandPW(bot))
 bot.add_cog(commandSF(bot))
 bot.add_cog(commandNews(bot))
+bot.add_cog(commandAdmin(bot))
 
 #main bot run command.
-bot.run(spaceBotTokens.spaceBotToken)
+bot.run(spaceBotTokens.testBotToken)
