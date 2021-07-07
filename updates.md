@@ -1,3 +1,11 @@
+# Release v0.4.2 2021-07-07
+## Front end
+- Added admin command for bot owner only
+
+## Back end
+- Potentially fixed bug with logging function
+- Added invalid command ignoring
+
 # Release v0.4.1 2021-07-04
 ## Front end
 - Removed useless parameters from mars command, now can only see Curiosity photos.

@@ -5,11 +5,11 @@
 A Discord bot that has cool space features.
 Created by Big Spender#7291
 
-[top.gg Info page](https://top.gg/bot/849246857309323284/)
+## Invite link
+https://discord.com/api/oauth2/authorize?client_id=849246857309323284&permissions=51264&scope=bot
 
-[Invite link](https://discord.com/api/oauth2/authorize?client_id=849246857309323284&permissions=51264&scope=bot)
-
-[Support discord](https://discord.gg/XnAGQSbMYM)
+## Support discord 
+https://discord.gg/XnAGQSbMYM)
 
 | Command | Parameters | Detail |
 |-|-|-|
@@ -33,7 +33,7 @@ Created by Big Spender#7291
 - More facts
 - Space Launches
 - Custom prefix
-
+ 
 # Bot Requirements
 ## Permissions Needed
 * Send Messages
