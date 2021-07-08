@@ -1,29 +1,29 @@
-# Release v0.4.3 2021-07-08
-## Front end
+**Release v0.4.3 2021-07-08**
+__Front end__
 - Added APOD video explanation
 
-# Back end
+__Back end__
 - Added APOD embedding for videos
 - Changed typing method (trigger_typing instead of  with typing) to avoid infinite typing
 - Added encoding option to log function to solve charmap error
 
 
-# Release v0.4.2 2021-07-07
-## Front end
+**Release v0.4.2 2021-07-07**
+__Front end__
 - Added admin command for bot owner only
 
-## Back end
+__Back end__
 - Potentially fixed bug with logging function
 - Added invalid command ignoring
 
 
-# Release v0.4.1 2021-07-04
-## Front end
+**Release v0.4.1 2021-07-04**
+__Front end__
 - Removed useless parameters from mars command, now can only see Curiosity photos.
 - Added new camera option to mars command, now includes mast camera.
 - Fixed planet weather command
 
-# Back end
+_Back end__
 - Added error catching to news command, now shows if there is no news for today.
 - Added error catching to ISS command, now shows if unable to find the ISS.
 - Added checks to API limits from api.nasa.gov
