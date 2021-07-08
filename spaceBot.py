@@ -740,4 +740,4 @@ bot.add_cog(commandNews(bot))
 bot.add_cog(commandAdmin(bot))
 
 #main bot run command.
-bot.run(spaceBotTokens.testBotToken)
+bot.run(spaceBotTokens.spaceBotToken)
