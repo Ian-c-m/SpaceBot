@@ -46,8 +46,7 @@ async def afterReady(status=False):
     now = datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     
-    if status == True:
-        
+    if status == True:        
 
         log("--------------")
         log(f"INFO - afterReady - Logged in as: {bot.user.name}")
@@ -58,7 +57,7 @@ async def afterReady(status=False):
 
         log("INFO - afterReady - Connected to following servers:")
         for guild in bot.guilds:
-            log(f"INFO - afterReady - Name: {guild.name}, ID: {guild.id}")
+            log(f"INFO - afterReady - Name: {guild.name}, ID: {guild.id}") 
             
         game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
         await bot.change_presence(status=discord.Status.online, activity=game)
@@ -88,8 +87,8 @@ class commandNews(commands.Cog, name="News"):
     async def news(self, ctx):
         log(f"INFO - news - {ctx.author} used {spaceBotConfig.discordPrefix}news")
         #could be slow at getting stuff from rss feed, so show that bot is responding.
-        #with ctx.typing():
         await ctx.trigger_typing()
+
         news = getNews()
         if news == "error":
             await ctx.send("Unable to gather news for today.")
@@ -110,7 +109,6 @@ class commandISS(commands.Cog, name="ISS"):
 
             log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}iss")
             
-            #async with ctx.typing():
             await ctx.trigger_typing()
             iss = getISS()
 
@@ -184,7 +182,6 @@ class commandPhotos(commands.Cog, name="Pictures"):
         if not ctx.author.bot:
             try:
                 #shows the ... typing animation until the message gets sent. shows that the bot has not ignored the request
-                #async with ctx.typing():
                 await ctx.trigger_typing()
                 log(f"INFO - apod - {ctx.author} used {spaceBotConfig.discordPrefix}apod")
 
@@ -200,14 +197,19 @@ class commandPhotos(commands.Cog, name="Pictures"):
                         metadata = json.load(jsonFile)
                         for data in metadata:
                             try:
-                                #if the media is a video, then just send the url
+                                #if the media is a video, send the URL and explanation in an embed. Can't embed an actual video
                                 if data['mediaType'] == "video":
-                                        
-                                    await ctx.send("Today's Astronomy Picture Of the Day is a video.")
-                                    await ctx.send(data['url'])
-                                    jsonFile.close()                                        
+                                    vidTitle = data['title']
+                                    vidUrl = data['url']
+                                    vidExp = data['explanation']
 
-                                #if the media is an image, then embed it with a title
+                                    embed = discord.Embed(title=vidTitle)
+                                    embed.add_field(name="Link", value=vidUrl)
+                                    embed.set_footer(text=vidExp)
+                                    await ctx.send(embed=embed)
+                                    jsonFile.close()
+
+                                #if the media is an image, then embed it with a title and explanation
                                 elif data['mediaType'] == "image":
                                     picTitle = data['title']
                                     extension = data['fileType']
@@ -224,13 +226,18 @@ class commandPhotos(commands.Cog, name="Pictures"):
 
                                 #edge case where mediaType is neither video or image
                                 else:
-                                    await ctx.send("Unable to send APOD, invalid media type")
                                     log(f"ERROR - apod - Unable to send APOD, media type is {data['mediaType']}")
+                                    await ctx.send("Unable to send APOD, invalid media type")
+                                    
                             
 
                             except JSONDecodeError:
                                 log("ERROR - apod - apoddata.txt was empty in commandAPOD")
                                 await ctx.send("Unable to send APOD, no data.")
+
+                            except Exception as e:
+                                log(f"ERROR - apod - Error running commandAPOD. {e}")
+
 
 
             except Exception as e:
@@ -510,10 +517,11 @@ def getAPOD():
                     if data['media_type'] == "video":
                         vidUrl = data['url']
                         vidTitle = data['title']
+                        vidExplanation = data['explanation']
                         
 
                         #saving metadata to file to reference later. saves API calls as only checking once a day for new pic.
-                        apodData = [{'lastRun':lastRun, 'mediaType':'video', 'url':vidUrl, 'title':vidTitle}]
+                        apodData = [{'lastRun':lastRun, 'mediaType':'video', 'url':vidUrl, 'title':vidTitle, 'explanation':vidExplanation}]
 
                         with open ("apoddata.txt", "w") as outfile:
                             json.dump(apodData, outfile)
@@ -707,7 +715,8 @@ def log(text):
 
     try:
         text = str(text)
-        with open(spaceBotConfig.fileLog, "a") as log:
+        #added encoding in v0.4.3 to solve charmap error
+        with open(spaceBotConfig.fileLog, "a", encoding="utf-8") as log:
             log.write("\n")
             log.write(now)
             log.write(text)        

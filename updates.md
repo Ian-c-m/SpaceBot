@@ -1,3 +1,14 @@
+# Release v0.4.3 2021-07-08
+## Front end
+- Added APOD video explanation
+
+# Back end
+- Added APOD embedding for videos
+- Changed typing method (trigger_typing instead of  with typing) to avoid infinite typing
+- Added encoding option to log function to solve charmap error
+
+
+
 # Release v0.4.2 2021-07-07
 ## Front end
 - Added admin command for bot owner only
@@ -5,6 +16,7 @@
 ## Back end
 - Potentially fixed bug with logging function
 - Added invalid command ignoring
+
 
 # Release v0.4.1 2021-07-04
 ## Front end
