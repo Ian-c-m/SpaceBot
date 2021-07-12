@@ -1,0 +1,113 @@
+
+2021-07-10 13:49:54 --------------
+2021-07-10 13:49:54 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 13:49:54 INFO - afterReady - ID: 811567642799243295
+2021-07-10 13:49:54 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 13:49:54 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 13:49:54 INFO - afterReady - Prefix: ?
+2021-07-10 13:49:54 INFO - afterReady - Connected to following servers:
+2021-07-10 13:49:54 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 13:49:54 INFO - afterReady - Status changed to "Playing ?help"
+2021-07-10 13:49:54 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 13:51:05 --------------
+2021-07-10 13:51:05 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 13:51:05 INFO - afterReady - ID: 811567642799243295
+2021-07-10 13:51:05 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 13:51:05 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 13:51:05 INFO - afterReady - Prefix: ?
+2021-07-10 13:51:05 INFO - afterReady - Connected to following servers:
+2021-07-10 13:51:05 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 13:51:05 INFO - afterReady - Status changed to "Playing ?help"
+2021-07-10 13:51:05 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 13:52:02 --------------
+2021-07-10 13:52:02 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 13:52:02 INFO - afterReady - ID: 811567642799243295
+2021-07-10 13:52:02 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 13:52:02 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 13:52:02 INFO - afterReady - Prefix: £
+2021-07-10 13:52:02 INFO - afterReady - Connected to following servers:
+2021-07-10 13:52:02 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 13:52:02 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 13:52:02 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 13:53:17 INFO - guild - Removed from Testys, 587666101509554211
+2021-07-10 13:53:37 INFO - guild - Got invited to Testys, 587666101509554211
+2021-07-10 14:00:01 --------------
+2021-07-10 14:00:01 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:00:01 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:00:01 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:00:01 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:00:01 INFO - afterReady - Prefix: £
+2021-07-10 14:00:01 INFO - afterReady - Connected to following servers:
+2021-07-10 14:00:01 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:00:01 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:00:01 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:00:25 --------------
+2021-07-10 14:00:25 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:00:25 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:00:25 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:00:25 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:00:25 INFO - afterReady - Prefix: £
+2021-07-10 14:00:25 INFO - afterReady - Connected to following servers:
+2021-07-10 14:00:25 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:00:25 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:00:25 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:02:41 --------------
+2021-07-10 14:02:41 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:02:41 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:02:41 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:02:41 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:02:41 INFO - afterReady - Prefix: £
+2021-07-10 14:02:41 INFO - afterReady - Connected to following servers:
+2021-07-10 14:02:41 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:02:41 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:02:41 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:03:39 --------------
+2021-07-10 14:03:39 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:03:39 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:03:39 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:03:39 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:03:39 INFO - afterReady - Prefix: £
+2021-07-10 14:03:39 INFO - afterReady - Connected to following servers:
+2021-07-10 14:03:39 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:03:39 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:03:39 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:04:45 --------------
+2021-07-10 14:04:45 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:04:45 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:04:45 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:04:45 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:04:45 INFO - afterReady - Prefix: £
+2021-07-10 14:04:45 INFO - afterReady - Connected to following servers:
+2021-07-10 14:04:45 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:04:45 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:04:45 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:08:11 --------------
+2021-07-10 14:08:11 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:08:11 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:08:11 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:08:11 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:08:11 INFO - afterReady - Prefix: £
+2021-07-10 14:08:11 INFO - afterReady - Connected to following servers:
+2021-07-10 14:08:11 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:08:11 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:08:11 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:08:57 --------------
+2021-07-10 14:08:57 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:08:57 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:08:57 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:08:57 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:08:57 INFO - afterReady - Prefix: £
+2021-07-10 14:08:57 INFO - afterReady - Connected to following servers:
+2021-07-10 14:08:57 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:08:57 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:08:57 INFO - afterReady - Set owner ID to 195617048569708545
+2021-07-10 14:09:06 --------------
+2021-07-10 14:09:06 INFO - afterReady - Logged in as: BigSpenderTestBot
+2021-07-10 14:09:06 INFO - afterReady - ID: 811567642799243295
+2021-07-10 14:09:06 INFO - afterReady - Discord Version: 1.6.0
+2021-07-10 14:09:06 INFO - afterReady - Script Version: v0.4.3
+2021-07-10 14:09:06 INFO - afterReady - Prefix: £
+2021-07-10 14:09:06 INFO - afterReady - Connected to following servers:
+2021-07-10 14:09:06 INFO - afterReady - Name: Testys, ID: 587666101509554211
+2021-07-10 14:09:06 INFO - afterReady - Status changed to "Playing £help"
+2021-07-10 14:09:06 INFO - afterReady - Set owner ID to 195617048569708545

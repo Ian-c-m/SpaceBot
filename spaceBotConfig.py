@@ -1,4 +1,4 @@
-discordPrefix = "?"
+discordPrefix = "£"
 fileLog = "spaceBotLog.txt"
 scriptVersion = "v0.4.3"
 cams = ["f", "n", "r", "m"]

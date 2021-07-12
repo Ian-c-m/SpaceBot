@@ -6,9 +6,17 @@ from datetime import datetime
 
 neededIntents = discord.Intents(guilds=True, messages=True)
 
-#uses either prefix or @ mention to activate, passes intents needed to function as well.
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
+def getPrefix(message):
+    print(message)
+    with open ("prefixes.json", "r") as file:
+        prefixes = json.load(file)
+        guildPrefix = prefixes[str(message.guild.id)]
+        return guildPrefix
 
+
+#uses either prefix or @ mention to activate, passes intents needed to function as well.
+#bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
+bot = commands.Bot(command_prefix=getPrefix, intents=neededIntents)
 #########################################################################################
 #    EVENT FUNCTIONS BELOW
 
@@ -22,21 +30,33 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     log(f"INFO - guild - Got invited to {guild.name}, {guild.id}")
+    with open("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+        prefixes[str(guild.id)] = ">"
+    with open("prefixes.json", "w") as f:
+        json.dump(prefixes, f, indent=4)
 
 
 #called when kicked/banned from a guild
 @bot.event
 async def on_guild_remove(guild):
     log(f"INFO - guild - Removed from {guild.name}, {guild.id}")
+    
+    with open("prefixes.json", "r") as f:
+        prefixes = json.load(f)
+        prefixes.pop(str(guild.id))
+    with open("prefixes.json", "w") as f:
+        json.dump(prefixes, f, indent=4)
 
 
 #ignore errors when command is not found, otherwise raise the error
 @bot.event
-async def on_command_error(ctx, error):
+async def on_command_error(error):
     if isinstance(error, CommandNotFound):
         return
     else:    
         raise error
+
 
 #########################################################################################
 #    STARTUP FUNCTIONS BELOW
@@ -73,6 +93,8 @@ async def afterReady(status=False):
         log("ERROR - afterReady - afterReady called, but was not ready")
         print(f"{now} - afterReady called, but was not ready")
         return
+
+
 
 
 #########################################################################################
@@ -380,6 +402,17 @@ class commandAdmin(commands.Cog, name="admin"):
             return
 
 
+    @commands.command(name="setprefix")
+    @commands.has_permissions(administrator=True)
+    async def setPrefix(self, ctx, prefix):
+        with open ("prefixes.json","r") as file:
+            prefixes = json.load(file)
+            prefixes[str(ctx.guild.id)] = prefix
+        
+        with open ("prefixes.json", "w") as file:
+            json.dump(prefixes, file, indent=4)
+        
+        await ctx.send(f"Set prefix to {prefix}")
 
 
 #########################################################################################
@@ -708,6 +741,8 @@ def getNews():
     
 
 
+
+
 def log(text):
 
     now = datetime.now()
@@ -740,4 +775,4 @@ bot.add_cog(commandNews(bot))
 bot.add_cog(commandAdmin(bot))
 
 #main bot run command.
-bot.run(spaceBotTokens.spaceBotToken)
+bot.run(spaceBotTokens.testBotToken)
