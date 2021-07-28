@@ -6,17 +6,30 @@ from datetime import datetime
 
 neededIntents = discord.Intents(guilds=True, messages=True)
 
-def getPrefix(message):
-    print(message)
-    with open ("prefixes.json", "r") as file:
-        prefixes = json.load(file)
-        guildPrefix = prefixes[str(message.guild.id)]
-        return guildPrefix
+#########################################################################################
+
+
+async def get_prefix(ctx, message):
+#   if message is None:
+#       return spaceBotConfig.discordPrefix
+#   else:
+    try:
+        with open ("prefixes.json", "r") as file:
+            
+            prefixes = json.load(file)
+            guildPrefix = prefixes[str(message.guild.id)]
+            log(f"INFO - get_prefix - found prefix {guildPrefix}")
+            await ctx.guild.me.edit(nick=f"{guildPrefix}{bot.user.name}")
+            return guildPrefix
+
+    except Exception:
+        log("WARNING - get_prefix - could not find custom prefix")
+        return spaceBotConfig.discordPrefix
 
 
 #uses either prefix or @ mention to activate, passes intents needed to function as well.
 #bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
-bot = commands.Bot(command_prefix=getPrefix, intents=neededIntents)
+bot = commands.Bot(command_prefix=(get_prefix), intents=neededIntents)
 #########################################################################################
 #    EVENT FUNCTIONS BELOW
 
@@ -30,14 +43,18 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     log(f"INFO - guild - Got invited to {guild.name}, {guild.id}")
+
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
-        prefixes[str(guild.id)] = ">"
+        prefixes[str(guild.id)] = spaceBotConfig.discordPrefix #the default prefix when joining a server.
     with open("prefixes.json", "w") as f:
         json.dump(prefixes, f, indent=4)
 
+    await guild.me.edit(nick=f"{spaceBotConfig.discordPrefix}{bot.user.name}")
 
-#called when kicked/banned from a guild
+
+
+#called when kicked/banned from a guild. removes custom prefix.
 @bot.event
 async def on_guild_remove(guild):
     log(f"INFO - guild - Removed from {guild.name}, {guild.id}")
@@ -51,11 +68,9 @@ async def on_guild_remove(guild):
 
 #ignore errors when command is not found, otherwise raise the error
 @bot.event
-async def on_command_error(error):
+async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
         return
-    else:    
-        raise error
 
 
 #########################################################################################
@@ -84,8 +99,8 @@ async def afterReady(status=False):
         
         log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")
 
-        bot.owner_id = spaceBotConfig.ownerID
-        log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
+        #bot.owner_id = spaceBotConfig.ownerID
+        #log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
 
         print(f"{now} - Space Bot Ready")
 
@@ -389,12 +404,14 @@ class commandAdmin(commands.Cog, name="admin"):
     def __init__(self, bot):
         self.bot = bot
     
+
     @commands.command(name="server", hidden=True)
     async def serverInfo(self, ctx):
         
         if ctx.message.author.id == bot.owner_id:
             #user is the owner of the bot
             for guild in bot.guilds:
+                
                 log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
 
         else:
@@ -402,7 +419,8 @@ class commandAdmin(commands.Cog, name="admin"):
             return
 
 
-    @commands.command(name="setprefix")
+
+    @commands.command(name="setprefix", brief="Sets the prefix for the bot", help="Sets the prefix for the bot in your server. Can only be used by people with the \"Administrator\" permission.")
     @commands.has_permissions(administrator=True)
     async def setPrefix(self, ctx, prefix):
         with open ("prefixes.json","r") as file:
@@ -411,8 +429,21 @@ class commandAdmin(commands.Cog, name="admin"):
         
         with open ("prefixes.json", "w") as file:
             json.dump(prefixes, file, indent=4)
-        
+
+        log(f"INFO - setPrefix - {ctx.author} set prefix to {prefix} for {ctx.guild.id}")
         await ctx.send(f"Set prefix to {prefix}")
+        await ctx.guild.me.edit(nick=f"{prefix}{bot.user.name}")
+
+
+
+    # @commands.command(name="getprefix")
+    # @commands.has_permissions(administrator=True)
+    # async def adminGetPrefix(self, ctx):
+    #     prefix = await get_prefix(ctx, ctx)
+    #     print(prefix)
+    #     await ctx.send(f"The prefix for this server is {prefix}")
+    #     log(f"INFO - adminGetPrefix - {ctx.author} checked the prefix, it was {prefix}")
+
 
 
 #########################################################################################
@@ -738,7 +769,8 @@ def getNews():
     else:
         #there is news for today, so return the Embed object.
         return todaysNews
-    
+
+
 
 
 
@@ -747,6 +779,7 @@ def log(text):
 
     now = datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S ")
+    now = str(now)
 
     try:
         text = str(text)
