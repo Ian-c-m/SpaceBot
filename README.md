@@ -9,7 +9,7 @@ Created by Big Spender#7291
 
 [Invite link](https://discord.com/api/oauth2/authorize?client_id=849246857309323284&permissions=51264&scope=bot)
 
-[Support discord](https://discord.gg/XnAGQSbMYM)
+[Support discord](https://discord.gg/9KeQnS94gS)
 
 | Command | Parameters | Detail |
 |-|-|-|
