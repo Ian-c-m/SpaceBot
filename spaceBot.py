@@ -2,7 +2,7 @@ import discord, requests, urllib, json, random, spaceBotConfig, spaceBotTokens, 
 from json.decoder import JSONDecodeError
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
-from datetime import datetime
+from datetime import datetime, timedelta
 
 neededIntents = discord.Intents(guilds=True, messages=True)
 
@@ -10,20 +10,17 @@ neededIntents = discord.Intents(guilds=True, messages=True)
 
 
 async def get_prefix(ctx, message):
-#   if message is None:
-#       return spaceBotConfig.discordPrefix
-#   else:
+
     try:
         with open ("prefixes.json", "r") as file:
             
             prefixes = json.load(file)
             guildPrefix = prefixes[str(message.guild.id)]
-            log(f"INFO - get_prefix - found prefix {guildPrefix}")
-            await ctx.guild.me.edit(nick=f"{guildPrefix}{bot.user.name}")
+            #log(f"INFO - get_prefix - found prefix \"{guildPrefix}\" for {message.guild.name}")
             return guildPrefix
 
-    except Exception:
-        log("WARNING - get_prefix - could not find custom prefix")
+    except Exception as e:
+        log(f"WARNING - get_prefix - could not find custom prefix. {e}")
         return spaceBotConfig.discordPrefix
 
 
@@ -46,7 +43,7 @@ async def on_guild_join(guild):
 
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
-        prefixes[str(guild.id)] = spaceBotConfig.discordPrefix #the default prefix when joining a server.
+        prefixes[str(guild.id)] = spaceBotConfig.discordPrefix #sets the default prefix when joining a server.
     with open("prefixes.json", "w") as f:
         json.dump(prefixes, f, indent=4)
 
@@ -57,7 +54,7 @@ async def on_guild_join(guild):
 #called when kicked/banned from a guild. removes custom prefix.
 @bot.event
 async def on_guild_remove(guild):
-    log(f"INFO - guild - Removed from {guild.name}, {guild.id}")
+    log(f"INFO - guild - Got removed from {guild.name}, {guild.id}")
     
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
@@ -99,8 +96,8 @@ async def afterReady(status=False):
         
         log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")
 
-        #bot.owner_id = spaceBotConfig.ownerID
-        #log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
+        bot.owner_id = spaceBotConfig.ownerID
+        log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
 
         print(f"{now} - Space Bot Ready")
 
@@ -171,7 +168,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
             try:
                 await ctx.trigger_typing()
                 planet = ""
-                log(f"INFO - pw - {ctx.author} used {spaceBotConfig.discordPrefix}pw {planetName}")
+                log(f"INFO - pw - {ctx.author} used pw {planetName}")
                 if planetName is not None:
                     planet = str(planetName).lower()
 
@@ -200,7 +197,7 @@ class commandPW(commands.Cog, name="Planet Weather"):
                 elif planet ==  "pluto":
                     message = "Pluto averages -388°F (-233°C). I'm still annoyed that it's not a planet."
                 else:
-                    log("ERROR - pw - Unknown planet")
+                    log("WARNING - pw - Unknown planet")
                     message = "Unknown planet! Try again..."
 
                 await ctx.send(message)
@@ -286,7 +283,7 @@ class commandPhotos(commands.Cog, name="Pictures"):
         
     async def mars(self, ctx, camArg=None):
         if not ctx.author.bot:
-            #async with ctx.typing():
+            
             await ctx.trigger_typing()
                 
             log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars {camArg}")
@@ -295,6 +292,9 @@ class commandPhotos(commands.Cog, name="Pictures"):
 
             if photoEmbed == "camArg fail":
                 await ctx.send("Please send a correct Camera argument.")
+            
+            elif photoEmbed == "rate limit":
+                await ctx.send("API Limits reached. Please wait an hour and try again.")
 
             elif photoEmbed == "availCam fail":
                 await ctx.send("This camera is not available for this craft.")
@@ -376,27 +376,28 @@ class commandAstros(commands.Cog, name="Astronauts"):
                         data = json.load(jsonFile)
                         numPeople = data['number']
                         names = data['people']
-
-                        replyDetails = ""
+                        
+                        replyEmbed = discord.Embed(title=f"There are {numPeople} people in space.")
                         for person in names:
-                            replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
+                            replyEmbed.add_field(name=person['name'], value=person['craft'], inline=False)
+                            #replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
                             
                             
                     #if there is no data in the txt file, then set default values.    
                     except JSONDecodeError:
                         jsonFile.close()
                         numPeople = 0
-                        replyDetails = "Unable to fetch details"
+                        #replyDetails = "Unable to fetch details"
 
                 #sends the list of people in space and their craft.
-                await ctx.send(f"There are {numPeople} people in space right now!")
-                await ctx.send(replyDetails)
-
+                #await ctx.send(f"There are {numPeople} people in space right now!")
+                #await ctx.send(replyDetails)
+                await ctx.send(embed=replyEmbed)
 
                 
             except Exception as e:
-                log("ERROR - astros - Error running commandAstros")
-                log(str(e))
+                log(f"ERROR - astros - Error running commandAstros. {e}")
+                
 
 
 #special command for bot owner only
@@ -409,12 +410,17 @@ class commandAdmin(commands.Cog, name="admin"):
     async def serverInfo(self, ctx):
         
         if ctx.message.author.id == bot.owner_id:
-            #user is the owner of the bot
+            #only runs if user is the owner of the bot
+            guildEmbed = discord.Embed(title="Server Info")
+
             for guild in bot.guilds:
-                
+                guildEmbed.add_field(name=guild.name, value=guild.id, inline=False)
                 log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
 
+            await ctx.send(embed=guildEmbed)
+
         else:
+            log(f"INFO - server - {ctx.author.id} was not allowed to use this command. {bot.owner_id}")
             #user is not the owner of the bot
             return
 
@@ -423,6 +429,13 @@ class commandAdmin(commands.Cog, name="admin"):
     @commands.command(name="setprefix", brief="Sets the prefix for the bot", help="Sets the prefix for the bot in your server. Can only be used by people with the \"Administrator\" permission.")
     @commands.has_permissions(administrator=True)
     async def setPrefix(self, ctx, prefix):
+
+        if ctx.guild is None:
+            #can't run this command in a DM
+            log(f"WARNING - setPrefix - {ctx.author} tried to set a prefix via a DM")
+            await ctx.send("This command is only available in a Guild, not a DM")
+            return
+
         with open ("prefixes.json","r") as file:
             prefixes = json.load(file)
             prefixes[str(ctx.guild.id)] = prefix
@@ -430,19 +443,19 @@ class commandAdmin(commands.Cog, name="admin"):
         with open ("prefixes.json", "w") as file:
             json.dump(prefixes, file, indent=4)
 
-        log(f"INFO - setPrefix - {ctx.author} set prefix to {prefix} for {ctx.guild.id}")
+        log(f"INFO - setPrefix - {ctx.author} set prefix to \"{prefix}\" for {ctx.guild.name}")
         await ctx.send(f"Set prefix to {prefix}")
         await ctx.guild.me.edit(nick=f"{prefix}{bot.user.name}")
 
 
 
-    # @commands.command(name="getprefix")
-    # @commands.has_permissions(administrator=True)
-    # async def adminGetPrefix(self, ctx):
-    #     prefix = await get_prefix(ctx, ctx)
-    #     print(prefix)
-    #     await ctx.send(f"The prefix for this server is {prefix}")
-    #     log(f"INFO - adminGetPrefix - {ctx.author} checked the prefix, it was {prefix}")
+    @commands.command(name="info")
+    async def adminInfo(self, ctx):
+        infoEmbed = discord.Embed(title="Space Bot Info")
+        infoEmbed.add_field(name="Discord Support Server", value=spaceBotConfig.discordServer, inline=False)
+        infoEmbed.add_field(name="Bot Code on Github", value=spaceBotConfig.githubLink, inline=False)
+        infoEmbed.add_field(name="Top.gg page", value=spaceBotConfig.topgg, inline=False)
+        await ctx.send(embed=infoEmbed)
 
 
 
@@ -471,24 +484,29 @@ def getMarsPhoto(camArg=None):
                 manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/Curiosity?api_key={spaceBotTokens.NASAApiKey}"
                 #get last photo date - maxSol
                 with urllib.request.urlopen(manifestUrl) as mUrl:
+                    
 
                     #checking remaining API limits
                     headers = mUrl.headers
                     hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
-                    #log(f"INFO - X-RateLimit-Limit = {headers['X-RateLimit-Limit']}. X-RateLimit-Remaining = {headers['X-RateLimit-Remaining']}")
+                    
                     if hourlyLmitRemaining <= 100:
                         log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+                        print(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
 
+                    if hourlyLmitRemaining == 0:
+                        #we used all our api calls up
+                        log("WARNING - getMarsPhoto - No requests left this hour.")
+                        return "rate limit"
                     
                     data = json.loads(mUrl.read().decode())
-                    with open("file.txt", "w") as file:
-                        file.write(str(data))
 
                     if data is not None: #check that we actually got data back
-
                         log("INFO - getMarsPhoto - Manifest data retrieved successfully.")
                         maxSol = data['photo_manifest']['max_sol']
-                        availCams = data['photo_manifest']['photos'][-1]['cameras']
+        
+                        availCams = data['photo_manifest']['photos'][-1]['cameras']                        
+                        numPhotos = data['photo_manifest']['photos'][-1]['total_photos']
 
                         if cam not in availCams: #if the chosen camera is not available this time.
                             log(f"WARNING - getMarsPhoto - {cam} not available for Curiosity, available cameras {availCams}.")
@@ -510,14 +528,23 @@ def getMarsPhoto(camArg=None):
                     #checking remaining API limits
                     headers = pUrl.headers
                     hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
-                    #log(f"INFO - X-RateLimit-Limit = {headers['X-RateLimit-Limit']}. X-RateLimit-Remaining = {headers['X-RateLimit-Remaining']}")
+
                     if hourlyLmitRemaining <= 100:
                         log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+                        print(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+
+                    if hourlyLmitRemaining == 0:
+                        #we used all our api calls up
+                        log("WARNING - getMarsPhoto - No requests left this hour.")
+                        return "rate limit"
 
                     if data is not None:
                         log("INFO - getMarsPhoto - Photo data retrieved successfully.")
-                        photoDate = data['photos'][-1]['earth_date']
-                        photoLink = data['photos'][-1]['img_src']
+                        
+                        photoSelect = random.randint(1,numPhotos)
+
+                        photoDate = data['photos'][photoSelect]['earth_date']
+                        photoLink = data['photos'][photoSelect]['img_src']
                         
                     else:
                         log(f"ERROR - getMarsPhoto - No data returned from photoUrl.")

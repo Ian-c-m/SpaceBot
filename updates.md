@@ -1,3 +1,15 @@
+# Release v0.5.0 2021-07-30
+## Front end
+- Added custom prefix command (only in Guilds, and only for people with the Administrator permission). Limited to 1 custom prefix
+- Added Info command to show links to the GitHub, support Discord server and Top.gg page
+- Mars command now shows a random photo from the given camera, instead of the latest photo
+
+## Back end
+- Improved checks for API limits
+- Astros command now lists people and the craft as an embed instead of text
+- PW command returns warning not error when planet is not recognised
+
+
 # Release v0.4.3 2021-07-08
 ## Front end
 - Added APOD video explanation
@@ -19,13 +31,13 @@
 
 # Release v0.4.1 2021-07-04
 ## Front end
-- Removed useless parameters from mars command, now can only see Curiosity photos.
-- Added new camera option to mars command, now includes mast camera.
+- Removed useless parameters from mars command, now can only see Curiosity photos
+- Added new camera option to mars command, now includes mast camera
 - Fixed planet weather command
 
 # Back end
-- Added error catching to news command, now shows if there is no news for today.
-- Added error catching to ISS command, now shows if unable to find the ISS.
+- Added error catching to news command, now shows if there is no news for today
+- Added error catching to ISS command, now shows if unable to find the ISS
 - Added checks to API limits from api.nasa.gov
 - Added more vebose logging for error handling
 - Added logging for joining/leaving guilds

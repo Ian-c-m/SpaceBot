@@ -1,3 +1,15 @@
+**Release v0.5.0 2021-07-30**
+__Front end__
+- Added custom prefix command (only in Guilds, and only for people with the Administrator permission). Limited to 1 custom prefix
+- Added Info command to show links to the GitHub, support Discord server and Top.gg page
+- Mars command now shows a random photo from the given camera, instead of the latest photo
+
+__Back end__
+- Improved checks for API limits
+- Astros command now lists people and the craft as an embed instead of text
+- PW command returns warning not error when planet is not recognised
+
+
 **Release v0.4.3 2021-07-08**
 __Front end__
 - Added APOD video explanation
