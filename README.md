@@ -20,6 +20,9 @@ Created by Big Spender#7291
 | ?apod | | Shows NASA's Astronomy Picture of the Day |
 |?mars | <camera> e.g. ?mars n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
 | ?pw | <planet> e.g. ?pw mars | Gives information on a planet's weather. |
+| ?info | | Shows links to the GitHub, support Discord server and Top.gg page |
+| ?setprefix | <prefix> e.g. ?setprefix . | Changes the prefix from the default "?" |
+
 
 ## Current Features
 - Space People (Astronauts!)
@@ -27,12 +30,12 @@ Created by Big Spender#7291
 - Space Stations
 - Space News
 - Space Pictures
-- Space Weather 
+- Space Weather
+- Custom prefix
 
 ## Future Features
 - More facts
 - Space Launches
-- Custom prefix
 
 # Bot Requirements
 ## Permissions Needed
