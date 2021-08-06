@@ -4,29 +4,14 @@ from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 from datetime import datetime, timedelta
 
-neededIntents = discord.Intents(guilds=True, messages=True)
+#neededIntents = discord.Intents(guilds=True, messages=True)
 
 #########################################################################################
 
-
-async def get_prefix(ctx, message):
-
-    try:
-        with open ("prefixes.json", "r") as file:
-            
-            prefixes = json.load(file)
-            guildPrefix = prefixes[str(message.guild.id)]
-            #log(f"INFO - get_prefix - found prefix \"{guildPrefix}\" for {message.guild.name}")
-            return guildPrefix
-
-    except Exception as e:
-        log(f"WARNING - get_prefix - could not find custom prefix. {e}")
-        return spaceBotConfig.discordPrefix
+#uses prefix to activate, passes intents needed to function as well.
+bot = commands.Bot(command_prefix=spaceBotConfig.discordPrefix, intents=spaceBotConfig.neededIntents)
 
 
-#uses either prefix or @ mention to activate, passes intents needed to function as well.
-#bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
-bot = commands.Bot(command_prefix=(get_prefix), intents=neededIntents)
 #########################################################################################
 #    EVENT FUNCTIONS BELOW
 
@@ -41,27 +26,12 @@ async def on_ready():
 async def on_guild_join(guild):
     log(f"INFO - guild - Got invited to {guild.name}, {guild.id}")
 
-    with open("prefixes.json", "r") as f:
-        prefixes = json.load(f)
-        prefixes[str(guild.id)] = spaceBotConfig.discordPrefix #sets the default prefix when joining a server.
-    with open("prefixes.json", "w") as f:
-        json.dump(prefixes, f, indent=4)
 
-    await guild.me.edit(nick=f"{spaceBotConfig.discordPrefix}{bot.user.name}")
-
-
-
-#called when kicked/banned from a guild. removes custom prefix.
+#called when kicked/banned from a guild.
 @bot.event
 async def on_guild_remove(guild):
     log(f"INFO - guild - Got removed from {guild.name}, {guild.id}")
     
-    with open("prefixes.json", "r") as f:
-        prefixes = json.load(f)
-        prefixes.pop(str(guild.id))
-    with open("prefixes.json", "w") as f:
-        json.dump(prefixes, f, indent=4)
-
 
 #ignore errors when command is not found, otherwise raise the error
 @bot.event
@@ -90,14 +60,14 @@ async def afterReady(status=False):
         log("INFO - afterReady - Connected to following servers:")
         for guild in bot.guilds:
             log(f"INFO - afterReady - Name: {guild.name}, ID: {guild.id}") 
-            
-        game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
-        await bot.change_presence(status=discord.Status.online, activity=game)
-        
-        log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")
 
         bot.owner_id = spaceBotConfig.ownerID
         log(f"INFO - afterReady - Set owner ID to {spaceBotConfig.ownerID}")
+
+        game = discord.Game(f"{spaceBotConfig.discordPrefix}help")
+        await bot.change_presence(status=discord.Status.online, activity=game)
+        
+        log(f"INFO - afterReady - Status changed to \"Playing {spaceBotConfig.discordPrefix}help\"")    
 
         print(f"{now} - Space Bot Ready")
 
@@ -223,7 +193,7 @@ class commandPhotos(commands.Cog, name="Pictures"):
 
                 #APOD() got an error when running
                 if result == "api fail":
-                    await ctx.send("Unable to get Astronomy Picture Of the Day.")
+                    await ctx.send("Error retrieving APOD")
                 
                 else:
                 #no error with APOD(), so send data
@@ -261,26 +231,26 @@ class commandPhotos(commands.Cog, name="Pictures"):
                                 #edge case where mediaType is neither video or image
                                 else:
                                     log(f"ERROR - apod - Unable to send APOD, media type is {data['mediaType']}")
-                                    await ctx.send("Unable to send APOD, invalid media type")
-                                    
+                                    await ctx.send("Error retrieving APOD")                                
                             
 
                             except JSONDecodeError:
                                 log("ERROR - apod - apoddata.txt was empty in commandAPOD")
-                                await ctx.send("Unable to send APOD, no data.")
+                                await ctx.send("Error retrieving APOD")  
 
                             except Exception as e:
+                                await ctx.send("Error retrieving APOD")
                                 log(f"ERROR - apod - Error running commandAPOD. {e}")
 
 
 
             except Exception as e:
+                await ctx.send("Error retrieving APOD")
                 log(f"ERROR - apod - Error running commandAPOD. {e}")
 
 
     
     @commands.command(name="mars", brief="Shows photos from Mars", help="""Shows the latest photo from Mars from Curiosity. \nUse ?mars <camera>. Camera is either "f", "r", "m" or "n" for Front, Rear, Mast or Navigation cameras on board""")
-        
     async def mars(self, ctx, camArg=None):
         if not ctx.author.bot:
             
@@ -290,26 +260,8 @@ class commandPhotos(commands.Cog, name="Pictures"):
 
             photoEmbed = getMarsPhoto(camArg)
 
-            if photoEmbed == "camArg fail":
-                await ctx.send("Please send a correct Camera argument.")
-            
-            elif photoEmbed == "rate limit":
-                await ctx.send("API Limits reached. Please wait an hour and try again.")
-
-            elif photoEmbed == "availCam fail":
-                await ctx.send("This camera is not available for this craft.")
-
-            elif photoEmbed == "manifestUrl fail":
-                await ctx.send("Problem retrieving manifest.")
-
-            elif photoEmbed == "photoUrl fail":
-                await ctx.send("Problem retrieving Photo.")
-
-            elif photoEmbed == "wrong arg":
-                await ctx.send("Please send correct arguments.")
-
-            elif photoEmbed == "missing arg":
-                await ctx.send("Please send correct arguments.")
+            if photoEmbed is False:
+                await ctx.send("Error retrieving photo.")        
 
             elif photoEmbed is None:
                 await ctx.send("Error retrieving photo.")
@@ -320,12 +272,10 @@ class commandPhotos(commands.Cog, name="Pictures"):
                 photoLink = photoEmbed[0]
                 photoDate = photoEmbed[1]
                 photoCamera = photoEmbed[2]
-
                                                         
                 embed = discord.Embed(title=f"Photo from Curiosity's {photoCamera} on {photoDate}")
                 embed.set_image(url=photoLink)
-                await ctx.send(embed=embed)            
-                log(f"INFO - mars - Sent Mars image")                  
+                await ctx.send(embed=embed)                 
                 
 
 
@@ -380,18 +330,15 @@ class commandAstros(commands.Cog, name="Astronauts"):
                         replyEmbed = discord.Embed(title=f"There are {numPeople} people in space.")
                         for person in names:
                             replyEmbed.add_field(name=person['name'], value=person['craft'], inline=False)
-                            #replyDetails = replyDetails + f"{person['name']} - {person['craft']} \n"
-                            
+                                                        
                             
                     #if there is no data in the txt file, then set default values.    
                     except JSONDecodeError:
                         jsonFile.close()
                         numPeople = 0
-                        #replyDetails = "Unable to fetch details"
+                        
 
                 #sends the list of people in space and their craft.
-                #await ctx.send(f"There are {numPeople} people in space right now!")
-                #await ctx.send(replyDetails)
                 await ctx.send(embed=replyEmbed)
 
                 
@@ -420,32 +367,9 @@ class commandAdmin(commands.Cog, name="admin"):
             await ctx.send(embed=guildEmbed)
 
         else:
-            log(f"INFO - server - {ctx.author.id} was not allowed to use this command. {bot.owner_id}")
+            log(f"INFO - server - {ctx.author.id} was not allowed to use this command.")
             #user is not the owner of the bot
             return
-
-
-
-    @commands.command(name="setprefix", brief="Sets the prefix for the bot", help="Sets the prefix for the bot in your server. Can only be used by people with the \"Administrator\" permission.")
-    @commands.has_permissions(administrator=True)
-    async def setPrefix(self, ctx, prefix):
-
-        if ctx.guild is None:
-            #can't run this command in a DM
-            log(f"WARNING - setPrefix - {ctx.author} tried to set a prefix via a DM")
-            await ctx.send("This command is only available in a Guild, not a DM")
-            return
-
-        with open ("prefixes.json","r") as file:
-            prefixes = json.load(file)
-            prefixes[str(ctx.guild.id)] = prefix
-        
-        with open ("prefixes.json", "w") as file:
-            json.dump(prefixes, file, indent=4)
-
-        log(f"INFO - setPrefix - {ctx.author} set prefix to \"{prefix}\" for {ctx.guild.name}")
-        await ctx.send(f"Set prefix to {prefix}")
-        await ctx.guild.me.edit(nick=f"{prefix}{bot.user.name}")
 
 
 
@@ -477,7 +401,7 @@ def getMarsPhoto(camArg=None):
                 elif camArg == "m": cam = "MAST"
                 else:
                     log(f"WARNING - getMarsPhoto - Incorrect camArg supplied - {camArg}")
-                    return "camArg fail"
+                    return False
                     
                 
 
@@ -497,7 +421,8 @@ def getMarsPhoto(camArg=None):
                     if hourlyLmitRemaining == 0:
                         #we used all our api calls up
                         log("WARNING - getMarsPhoto - No requests left this hour.")
-                        return "rate limit"
+                        print("WARNING - getMarsPhoto - No requests left this hour.")
+                        return False
                     
                     data = json.loads(mUrl.read().decode())
 
@@ -510,12 +435,12 @@ def getMarsPhoto(camArg=None):
 
                         if cam not in availCams: #if the chosen camera is not available this time.
                             log(f"WARNING - getMarsPhoto - {cam} not available for Curiosity, available cameras {availCams}.")
-                            return "availCam fail"
+                            return False
                         
                             
                     else:
                         log(f"ERROR - getMarsPhoto - No data returned from manifestUrl.")
-                        return "manifestUrl fail"
+                        return False
                         
 
 
@@ -536,11 +461,13 @@ def getMarsPhoto(camArg=None):
                     if hourlyLmitRemaining == 0:
                         #we used all our api calls up
                         log("WARNING - getMarsPhoto - No requests left this hour.")
-                        return "rate limit"
+                        print("WARNING - getMarsPhoto - No requests left this hour.")
+                        return False
 
                     if data is not None:
                         log("INFO - getMarsPhoto - Photo data retrieved successfully.")
                         
+                        #selects a random photo from the given camera on the latest day available
                         photoSelect = random.randint(1,numPhotos)
 
                         photoDate = data['photos'][photoSelect]['earth_date']
@@ -548,20 +475,21 @@ def getMarsPhoto(camArg=None):
                         
                     else:
                         log(f"ERROR - getMarsPhoto - No data returned from photoUrl.")
-                        return "photoUrl fail"
+                        return False
 
                 return photoLink, photoDate, cam
 
             else: 
                 log(f"INFO - getMarsPhoto - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
-                return "wrong arg"                     
+                return False                    
         
         else:
             log(f"INFO - getMarsPhoto - Missing arg in {spaceBotConfig.discordPrefix}mars")
-            return "missing arg"
+            return False
 
     except Exception as e:
         log(f"ERROR - getMarsPhoto - Error running getMarsPhoto {e}")
+        return False
 
 
 #Astronomy Picture of the Day helper function, does API calls.
@@ -652,6 +580,7 @@ def getAPOD():
 
                     
                 else:
+                    #data is None
                     log("ERROR - getAPOD - Failed to get APOD")
                     return "api fail"
 
@@ -835,4 +764,4 @@ bot.add_cog(commandNews(bot))
 bot.add_cog(commandAdmin(bot))
 
 #main bot run command.
-bot.run(spaceBotTokens.testBotToken)
+bot.run(spaceBotTokens.spaceBotToken)

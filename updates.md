@@ -1,3 +1,10 @@
+# Release v0.5.2 2021-08-06
+## Front end
+- Removed custom prefix command, lots of issues with it. May return in the future.
+
+## Back end
+- Cleaned up comments
+
 # Release v0.5.0 2021-07-30
 ## Front end
 - Added custom prefix command (only in Guilds, and only for people with the Administrator permission). Limited to 1 custom prefix

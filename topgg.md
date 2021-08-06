@@ -16,7 +16,6 @@ Created by Big Spender#7291
 |?mars | <camera> e.g. ?mars n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
 | ?pw | <planet> e.g. ?pw mars | Gives information on a planet's weather. |
 | ?info | | Shows links to the GitHub, support Discord server and Top.gg page |
-| ?setprefix | <prefix> e.g. ?setprefix . | Changes the prefix from the default "?" |
 
 
 ## Current Features
@@ -26,7 +25,6 @@ Created by Big Spender#7291
 - Space News
 - Space Pictures
 - Space Weather 
-- Custom Prefix
 
 ## Future Features
 - More facts
