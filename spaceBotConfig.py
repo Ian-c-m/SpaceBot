@@ -1,7 +1,7 @@
 import discord
 discordPrefix = "£"
 fileLog = "spaceBotLog.txt"
-scriptVersion = "v0.5.0"
+scriptVersion = "v0.5.2"
 cams = ["f", "n", "r", "m"]
 ownerID = 195617048569708545
 githubLink = "https://github.com/quackersian/space-bot"
