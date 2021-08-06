@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 from datetime import datetime, timedelta
 
-neededIntents = discord.Intents(guilds=True, messages=True)
+#neededIntents = discord.Intents(guilds=True, messages=True)
 
 #########################################################################################
 
@@ -24,9 +24,10 @@ async def get_prefix(ctx, message):
         return spaceBotConfig.discordPrefix
 
 
-#uses either prefix or @ mention to activate, passes intents needed to function as well.
-#bot = commands.Bot(command_prefix=commands.when_mentioned_or(spaceBotConfig.discordPrefix), intents=neededIntents)
-bot = commands.Bot(command_prefix=(get_prefix), intents=neededIntents)
+#uses prefix to activate, passes intents needed to function as well.
+bot = commands.Bot(command_prefix=(get_prefix), intents=spaceBotConfig.neededIntents)
+
+
 #########################################################################################
 #    EVENT FUNCTIONS BELOW
 
