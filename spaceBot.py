@@ -133,49 +133,44 @@ class commandPW(commands.Cog, name="Planet Weather"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="pw", brief="Different Planet's Weather", help=f"Weather forecast for a given planet in our solar system. \nTry {spaceBotConfig.discordPrefix}pw pluto")
+    @commands.command(name="pw", brief="Different Planet's Weather", help=f"""Weather forecast for a given planet in our solar system. 
+                                                                                \nTry \"{spaceBotConfig.discordPrefix}pw pluto\". 
+                                                                                    Use \"{spaceBotConfig.discordPrefix}pw random\" for a random planet.""")
     async def weather(self, ctx, planetName=None):
         if not ctx.author.bot:
+            
             try:
                 await ctx.trigger_typing()
                 planet = ""
                 log(f"INFO - pw - {ctx.author} used pw {planetName}")
+
                 if planetName is not None:
+                    #force planet to be a string and lowercase to make it easier to deal with
                     planet = str(planetName).lower()
 
-                #picks a random planet from the list
-                if planet == "random" or planetName is None:
-                    listPlanets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
-                    planet = random.choice(listPlanets)
+                #picks a random planet from the list if one isn't given
+                if planet == "random" or planet == "r" or planetName is None:
 
-                #weather and comments for each planet
-                if planet == "mercury":
-                    message = "Mercury averages 800°F (430°C) during the day, -290°F (-180°C) at night. Quite windy, so make sure to grab a jacket before heading out."
-                elif planet ==  "venus":
-                    message = "Venus averages 880°F (471°C). Acid rain likely, so bring an umbrella."
-                elif planet ==  "earth":
-                    message = "Earth averages 61°F (16°C). There will be weather."
-                elif planet ==  "mars":
-                    message = "Mars averages -20°F (-28°C). A little chilly out, so don't forget a jumper."
-                elif planet ==  "jupiter":
-                    message = "Jupiter averages -162°F (-108°C). There's no solid ground, you'll need a yacht."
-                elif planet ==  "saturn":
-                    message = "Saturn averages -218°F (-138°C). Big storms at the north pole, and watch out for the strong winds."
-                elif planet ==  "uranus":
-                    message = "Uranus averages -320°F (-195°C). A little nippy, so wrap up well."
-                elif planet ==  "neptune":
-                    message = "Neptune averages -331°F (-201°C). Winds are picking up, so be careful out there!"
-                elif planet ==  "pluto":
-                    message = "Pluto averages -388°F (-233°C). I'm still annoyed that it's not a planet."
+                    #picks a random planet from the list of planets & weather in config file
+                    message = random.choice(list(spaceBotConfig.planetWeather.values()))
+
                 else:
-                    log("WARNING - pw - Unknown planet")
-                    message = "Unknown planet! Try again..."
+                    #picks the planet weather given by the argument
+                    message = spaceBotConfig.planetWeather[planet]
+                
 
-                await ctx.send(message)
+            except KeyError as k:
+                #if the planet given isn't found in the list
+                log(f"WARNING - pw - Unknown planet {k}")
+                message = "Unknown planet! Try again."
+
 
             except Exception as e:
                 log(f"ERROR - pw - Error running commandPW. {e}")
+                message = "Unable to get planet weather."
                 
+            await ctx.send(message)
+
 
 
 class commandPhotos(commands.Cog, name="Pictures"):
@@ -291,6 +286,7 @@ class commandPhotos(commands.Cog, name="Pictures"):
                 log(f"INFO - mars - Sent curiosity photos to {ctx.author}")
 
 
+
 class commandSF(commands.Cog, name="Facts"):
     def __init__(self, bot):
         self.bot = bot
@@ -303,8 +299,8 @@ class commandSF(commands.Cog, name="Facts"):
                 log(f"INFO - facts - {ctx.author} used {spaceBotConfig.discordPrefix}facts")
 
                 #a list of facts            
-                lines = open("facts.txt").read().splitlines()
-                randFact = random.choice(lines)
+                facts = open("facts.txt").read().splitlines()
+                randFact = random.choice(facts)
                 
                 await ctx.send(randFact)
 
@@ -312,6 +308,7 @@ class commandSF(commands.Cog, name="Facts"):
             except Exception as e:
                 log("ERROR - facts - Error running commandSF")
                 log(str(e))
+                await ctx.send("Unable to give you a cool fact.")
 
 
 
@@ -376,17 +373,20 @@ class commandAdmin(commands.Cog, name="admin"):
             guildEmbed = discord.Embed(title="Server Info")
 
             for guild in bot.guilds:
+
+                guildCount = len(bot.guilds)
+
                 try:
                     #create an embed with a list of all the guilds the bot has been invited to, and the date time it was invited. 
                     joinDate = guild.me.joined_at                  
                     joinDate = joinDate.strftime("%Y-%m-%d %H:%M:%S")
 
                     guildEmbed.add_field(name=guild.name, value=f"Joined on {joinDate}. {guild.member_count} members.", inline=False)                    
-                    guildCount += 1
+                    #guildCount += 1
                     log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
                 
                 except Exception as e:
-                    log(f"ERROR - server - {e}")
+                    log(f"ERROR - server - Could not create embed with info - {e}")
 
             #Adds a count of servers the bot is in.
             guildEmbed.set_footer(text=f"SpaceBot is in {guildCount} servers.")
@@ -395,17 +395,28 @@ class commandAdmin(commands.Cog, name="admin"):
 
         else:
             #user is not the owner of the bot
-            log(f"INFO - server - {ctx.author} ({ctx.author.id}) was not allowed to use this command.")
+            log(f"INFO - server - {ctx.author} ({ctx.author.id}) is not allowed to use this command.")
             return
 
 
 
-    @commands.command(name="info")
+    @commands.command(name="info", brief="Info about the bot", help="Gives links and stats about this bot.")
     async def adminInfo(self, ctx):
+        
+        guildCount = len(bot.guilds)
+
+        #for guild in bot.guilds:
+        #    guildCount += 1
+
         infoEmbed = discord.Embed(title="Space Bot Info")
+        infoEmbed.add_field(name="Version", value=spaceBotConfig.scriptVersion + " - " + spaceBotConfig.scriptDate, inline=True)
+        infoEmbed.add_field(name="Joined servers", value=guildCount, inline=True)
         infoEmbed.add_field(name="Discord Support Server", value=spaceBotConfig.discordServer, inline=False)
         infoEmbed.add_field(name="Bot Code on Github", value=spaceBotConfig.githubLink, inline=False)
         infoEmbed.add_field(name="Top.gg page", value=spaceBotConfig.topgg, inline=False)
+        
+
+
         log(f"INFO - info - {ctx.author} checked bot info.")  
         await ctx.send(embed=infoEmbed)
 
@@ -484,7 +495,6 @@ def getMarsPhoto():
             else:
                 navPhotoLink = None
                 log(f"WARNING - getMarsPhoto - No navPhotoLink")
-
         
         return frontPhotoLink, rearPhotoLink, navPhotoLink, photoDate
 
@@ -692,7 +702,7 @@ def getNews():
     month = int(today.strftime("%m"))
     day = int(today.strftime("%d"))
     stringToday = today.strftime("%Y-%m-%d")
-
+    articleCount = 0
     url = "https://www.space.com/feeds/all"
 
     #error catching incase url is down/can't connect
@@ -710,11 +720,12 @@ def getNews():
         #only get today's news.
         if entry.published_parsed[0] == year and entry.published_parsed[1] == month and entry.published_parsed[2] == day:
             todaysNews.add_field(name=entry.title, value=entry.link, inline=False)
-        
-        #only want to return 10 news articles at once.
-        if len(todaysNews) == 10:
-            log(f"INFO - getNews - todaysNews is 10")
-            break
+
+            articleCount += 1
+            
+            #only want to return 10 news articles at once.
+            if articleCount == 10:
+                return todaysNews
                 
                 
     #check if fields list is empty (implying we have no news for today)
