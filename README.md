@@ -24,7 +24,6 @@ Created by Big Spender#7291
 
 
 ## Current Features
-- Space People (Astronauts!)
 - Space Facts
 - Space Stations
 - Space News
@@ -34,6 +33,7 @@ Created by Big Spender#7291
 ## Future Features
 - More facts
 - Space Launches
+- Astronauts in space
 
 # Bot Requirements
 ## Permissions Needed

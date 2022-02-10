@@ -1,9 +1,19 @@
+# Release v0.6.0 2022-02-10
+## Front end
+- Removed astros command as data source was no longer working.
+- Fixed mars command, now shows pictures from different cameras.
+
+## Back end
+- Begin planning for transition of API's
+
+
 # Release v0.5.2 2021-08-06
 ## Front end
 - Removed custom prefix command, lots of issues with it. May return in the future.
 
 ## Back end
 - Cleaned up comments
+
 
 # Release v0.5.0 2021-07-30
 ## Front end

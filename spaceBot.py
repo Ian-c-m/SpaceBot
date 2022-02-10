@@ -1,8 +1,9 @@
+from site import execsitecustomize
 import discord, requests, urllib, json, random, spaceBotConfig, spaceBotTokens, feedparser, os.path
 from json.decoder import JSONDecodeError
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
-from datetime import datetime, timedelta
+from datetime import datetime
 
 #neededIntents = discord.Intents(guilds=True, messages=True)
 
@@ -250,33 +251,44 @@ class commandPhotos(commands.Cog, name="Pictures"):
 
 
     
-    @commands.command(name="mars", brief="Shows photos from Mars", help="""Shows the latest photo from Mars from Curiosity. \nUse ?mars <camera>. Camera is either "f", "r", "m" or "n" for Front, Rear, Mast or Navigation cameras on board""")
-    async def mars(self, ctx, camArg=None):
+    @commands.command(name="mars", brief="Shows photos from Mars", help="Shows the latest photo from Mars from Curiosity.")
+    async def mars(self, ctx):
+
+        #if the sender of the message was not a bot, then continue. ignores bots trying to send messages.
         if not ctx.author.bot:
             
             await ctx.trigger_typing()
                 
-            log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars {camArg}")
+            log(f"INFO - mars - {ctx.author} used {spaceBotConfig.discordPrefix}mars")
 
-            photoEmbed = getMarsPhoto(camArg)
+            photoEmbed = getMarsPhoto()
 
             if photoEmbed is False:
-                await ctx.send("Error retrieving photo.")        
+                await ctx.send("Unable to retrieve photo.")        
 
             elif photoEmbed is None:
-                await ctx.send("Error retrieving photo.")
+                await ctx.send("Unable to retrieve photo.")
                 log("ERROR - mars - photoEmbed was none.")
 
             else:
-                
-                photoLink = photoEmbed[0]
-                photoDate = photoEmbed[1]
-                photoCamera = photoEmbed[2]
-                                                        
-                embed = discord.Embed(title=f"Photo from Curiosity's {photoCamera} on {photoDate}")
-                embed.set_image(url=photoLink)
-                await ctx.send(embed=embed)                 
-                
+                frontPhotoLink = photoEmbed[0]
+                rearPhotoLink = photoEmbed[1]
+                navPhotoLink = photoEmbed[2]
+                photoDate = photoEmbed[3]                
+
+                embed = discord.Embed(title=f"Front Camera on {photoDate}")
+                embed.set_image(url=frontPhotoLink)
+                await ctx.send(embed=embed)
+
+                embed = discord.Embed(title=f"Rear Camera on {photoDate}")
+                embed.set_image(url=rearPhotoLink)
+                await ctx.send(embed=embed)
+
+                embed = discord.Embed(title=f"Navigation Camera on {photoDate}")
+                embed.set_image(url=navPhotoLink)
+                await ctx.send(embed=embed)
+
+                log(f"INFO - mars - Sent curiosity photos to {ctx.author}")
 
 
 class commandSF(commands.Cog, name="Facts"):
@@ -303,7 +315,7 @@ class commandSF(commands.Cog, name="Facts"):
 
 
 
-class commandAstros(commands.Cog, name="Astronauts"):
+""" class commandAstros(commands.Cog, name="Astronauts"):
     def __init__(self, bot):
         self.bot = bot
 
@@ -345,7 +357,7 @@ class commandAstros(commands.Cog, name="Astronauts"):
             except Exception as e:
                 log(f"ERROR - astros - Error running commandAstros. {e}")
                 
-
+ """
 
 #special command for bot owner only
 class commandAdmin(commands.Cog, name="admin"):
@@ -355,20 +367,35 @@ class commandAdmin(commands.Cog, name="admin"):
 
     @commands.command(name="server", hidden=True)
     async def serverInfo(self, ctx):
-        
-        if ctx.message.author.id == bot.owner_id:
-            #only runs if user is the owner of the bot
+        log(f"INFO - server - {ctx.author} used server command.")
+
+        #only runs if user is the owner of the bot
+        if ctx.message.author.id == spaceBotConfig.ownerID:
+
+            guildCount = 0
             guildEmbed = discord.Embed(title="Server Info")
 
             for guild in bot.guilds:
-                guildEmbed.add_field(name=guild.name, value=guild.id, inline=False)
-                log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
+                try:
+                    #create an embed with a list of all the guilds the bot has been invited to, and the date time it was invited. 
+                    joinDate = guild.me.joined_at                  
+                    joinDate = joinDate.strftime("%Y-%m-%d %H:%M:%S")
 
+                    guildEmbed.add_field(name=guild.name, value=f"Joined on {joinDate}. {guild.member_count} members.", inline=False)                    
+                    guildCount += 1
+                    log(f"INFO - server - Name: {guild.name}, ID: {guild.id}")
+                
+                except Exception as e:
+                    log(f"ERROR - server - {e}")
+
+            #Adds a count of servers the bot is in.
+            guildEmbed.set_footer(text=f"SpaceBot is in {guildCount} servers.")
             await ctx.send(embed=guildEmbed)
 
+
         else:
-            log(f"INFO - server - {ctx.author.id} was not allowed to use this command.")
             #user is not the owner of the bot
+            log(f"INFO - server - {ctx.author} ({ctx.author.id}) was not allowed to use this command.")
             return
 
 
@@ -379,6 +406,7 @@ class commandAdmin(commands.Cog, name="admin"):
         infoEmbed.add_field(name="Discord Support Server", value=spaceBotConfig.discordServer, inline=False)
         infoEmbed.add_field(name="Bot Code on Github", value=spaceBotConfig.githubLink, inline=False)
         infoEmbed.add_field(name="Top.gg page", value=spaceBotConfig.topgg, inline=False)
+        log(f"INFO - info - {ctx.author} checked bot info.")  
         await ctx.send(embed=infoEmbed)
 
 
@@ -386,106 +414,79 @@ class commandAdmin(commands.Cog, name="admin"):
 #########################################################################################
 #    HELPER FUNCTIONS BELOW
 
-def getMarsPhoto(camArg=None):
+def getMarsPhoto():
     
-    try:
-        if camArg is not None: #check that the arguments have been supplied
-            
-            cams = spaceBotConfig.cams
+    try: 
 
-            if camArg in cams: #check that the arguments supplied are correct
+        manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/Curiosity?api_key={spaceBotTokens.NASAApiKey}"
+        with urllib.request.urlopen(manifestUrl) as mUrl:                    
 
-                if camArg == "f": cam = "FHAZ"
-                elif camArg == "r": cam = "RHAZ"
-                elif camArg == "n": cam = "NAVCAM"
-                elif camArg == "m": cam = "MAST"
-                else:
-                    log(f"WARNING - getMarsPhoto - Incorrect camArg supplied - {camArg}")
-                    return False
+            #checking remaining API limits
+            headers = mUrl.headers
+            hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
                     
-                
+            if hourlyLmitRemaining <= 100:
+                log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+                print(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
 
-                manifestUrl = f"https://api.nasa.gov/mars-photos/api/v1/manifests/Curiosity?api_key={spaceBotTokens.NASAApiKey}"
-                #get last photo date - maxSol
-                with urllib.request.urlopen(manifestUrl) as mUrl:
+            if hourlyLmitRemaining == 0:
+                #we used all our api calls up
+                log("WARNING - getMarsPhoto - No requests left this hour.")
+                print("WARNING - getMarsPhoto - No requests left this hour.")
+                return False
                     
+            data = json.loads(mUrl.read().decode())
 
-                    #checking remaining API limits
-                    headers = mUrl.headers
-                    hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
-                    
-                    if hourlyLmitRemaining <= 100:
-                        log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
-                        print(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
-
-                    if hourlyLmitRemaining == 0:
-                        #we used all our api calls up
-                        log("WARNING - getMarsPhoto - No requests left this hour.")
-                        print("WARNING - getMarsPhoto - No requests left this hour.")
-                        return False
-                    
-                    data = json.loads(mUrl.read().decode())
-
-                    if data is not None: #check that we actually got data back
-                        log("INFO - getMarsPhoto - Manifest data retrieved successfully.")
-                        maxSol = data['photo_manifest']['max_sol']
-        
-                        availCams = data['photo_manifest']['photos'][-1]['cameras']                        
-                        numPhotos = data['photo_manifest']['photos'][-1]['total_photos']
-
-                        if cam not in availCams: #if the chosen camera is not available this time.
-                            log(f"WARNING - getMarsPhoto - {cam} not available for Curiosity, available cameras {availCams}.")
-                            return False
-                        
+            if data is not None: #check that we actually got data back
+                log("INFO - getMarsPhoto - Manifest data retrieved successfully.")                
+                #get the date of the last photo
+                maxSol = data['photo_manifest']['max_sol']                      
                             
-                    else:
-                        log(f"ERROR - getMarsPhoto - No data returned from manifestUrl.")
-                        return False
-                        
+            else:
+                log(f"ERROR - getMarsPhoto - No data returned from manifestUrl.")
+                return False
 
 
+        #get three photos (if possible) from front, rear and nav cameras        
+        fhazPhoto = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=FHAZ&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
+        rhazPhoto = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=RHAZ&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
+        navPhoto = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=NAVCAM&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
 
-                photoUrl = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera={cam}&sol={maxSol}&api_key={spaceBotTokens.NASAApiKey}"
-                with urllib.request.urlopen(photoUrl) as pUrl:
 
-                    data = json.loads(pUrl.read().decode())
+        with urllib.request.urlopen(fhazPhoto) as fhaz:
 
-                    #checking remaining API limits
-                    headers = pUrl.headers
-                    hourlyLmitRemaining = int(headers['X-RateLimit-Remaining'])
+            frontData = json.loads(fhaz.read().decode())
 
-                    if hourlyLmitRemaining <= 100:
-                        log(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
-                        print(f"WARNING - getMarsPhoto - Only {hourlyLmitRemaining}/1000 requests left this hour.")
+            if frontData is not None:            
+                frontPhotoLink = frontData['photos'][-1]['img_src']
+                photoDate = frontData['photos'][-1]['earth_date']
+                   
+            else:
+                frontPhotoLink = None
+                log(f"WARNING - getMarsPhoto - No frontPhotoLink")
 
-                    if hourlyLmitRemaining == 0:
-                        #we used all our api calls up
-                        log("WARNING - getMarsPhoto - No requests left this hour.")
-                        print("WARNING - getMarsPhoto - No requests left this hour.")
-                        return False
 
-                    if data is not None:
-                        log("INFO - getMarsPhoto - Photo data retrieved successfully.")
-                        
-                        #selects a random photo from the given camera on the latest day available
-                        photoSelect = random.randint(1,numPhotos)
+        with urllib.request.urlopen(rhazPhoto) as rhaz:
+            rearData = json.loads(rhaz.read().decode())
 
-                        photoDate = data['photos'][photoSelect]['earth_date']
-                        photoLink = data['photos'][photoSelect]['img_src']
-                        
-                    else:
-                        log(f"ERROR - getMarsPhoto - No data returned from photoUrl.")
-                        return False
-
-                return photoLink, photoDate, cam
-
-            else: 
-                log(f"INFO - getMarsPhoto - Incorrect arg supplied in {spaceBotConfig.discordPrefix}mars")
-                return False                    
+            if frontData is not None:            
+                rearPhotoLink = rearData['photos'][-1]['img_src']
+            else:
+                rearPhotoLink = None
+                log(f"WARNING - getMarsPhoto - No rearPhotoLink")
         
-        else:
-            log(f"INFO - getMarsPhoto - Missing arg in {spaceBotConfig.discordPrefix}mars")
-            return False
+
+        with urllib.request.urlopen(navPhoto) as nav:
+            navData = json.loads(nav.read().decode())
+
+            if frontData is not None:            
+                navPhotoLink = navData['photos'][-1]['img_src']
+            else:
+                navPhotoLink = None
+                log(f"WARNING - getMarsPhoto - No navPhotoLink")
+
+        
+        return frontPhotoLink, rearPhotoLink, navPhotoLink, photoDate
 
     except Exception as e:
         log(f"ERROR - getMarsPhoto - Error running getMarsPhoto {e}")
@@ -505,7 +506,7 @@ def getAPOD():
 
             #if file is empty, then set a default value
             except JSONDecodeError:
-                log("WARNING - getAPOD - apoddata.txt was empty")
+                log("INFO - getAPOD - apoddata.txt was empty")
                 lastRun = None
 
             jsonFile.close()
@@ -601,7 +602,7 @@ def getAPOD():
   
 
 
-#Astros helper function, does API calls
+""" #Astros helper function, does API calls
 def getAstros():
     try:
         
@@ -664,7 +665,7 @@ def getAstros():
         log("INFO - getAstros - Same day, skipping checking API for astros")
 
 
-
+ """
 
 #ISS location helper fucntion, does API calls.
 def getISS():
@@ -756,7 +757,7 @@ def log(text):
 
 #add cogs
 bot.add_cog(commandPhotos(bot))
-bot.add_cog(commandAstros(bot))
+#bot.add_cog(commandAstros(bot)) #removed v0.6.0 as data source obselete.
 bot.add_cog(commandISS(bot))
 bot.add_cog(commandPW(bot))
 bot.add_cog(commandSF(bot))
