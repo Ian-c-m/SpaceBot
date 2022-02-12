@@ -13,7 +13,7 @@ Created by Big Spender#7291
 | ?iss |  | Gives the live location of the International Space Station. |
 | ?news | | Shows today's space news |
 | ?apod | | Shows NASA's Astronomy Picture of the Day |
-|?mars | <camera> e.g. ?mars n | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
+|?mars | | Shows photos from spacecraft on/around Mars. see ?help mars for more info |
 | ?pw | <planet> e.g. ?pw mars | Gives information on a planet's weather. |
 | ?info | | Shows links to the GitHub, support Discord server and Top.gg page |
 
