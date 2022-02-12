@@ -1,3 +1,13 @@
+# Release v0.6.1 2022-02-10
+## Front end
+- Added extra details to info command
+
+## Back end
+- Cleaned up planet weather command
+- Cleaned up news command
+
+
+
 # Release v0.6.0 2022-02-10
 ## Front end
 - Removed astros command as data source was no longer working.
