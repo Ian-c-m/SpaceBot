@@ -14,11 +14,10 @@ Created by Big Spender#7291
 | Command | Parameters | Detail |
 |-|-|-|
 | astros | | Shows the number of astronauts in space. |
-| facts |  | Gives a random Space fact. |
 | iss |  | Gives the live location of the International Space Station. |
 | news | | Shows today's space news. |
 | photos | <location> e.g. space | Shows various space photos. |
-| pw | <planet> e.g. mars | Gives information on a planet's weather. |
+| weather | <planet> e.g. mars | Gives information on a planet's weather. |
 | launch | <launch name> | Gives info on the next launches, and more detailed info on a specific launch if given. |
 | info | | Shows links to the GitHub, support Discord server and Top.gg page. |
 
