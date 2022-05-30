@@ -10,9 +10,8 @@ from datetime import datetime
 
 
 
-#TODO: Replace this with the one below once your code is live. Once live, changes to commands can take up to 1 hour to sync any slash commands.
-bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
-#bot = commands.InteractionBot()
+#bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
+bot = commands.InteractionBot()
 
 #########################################################################################
 #    STARTUP FUNCTIONS BELOW
@@ -50,7 +49,7 @@ async def on_ready():
         game = disnake.Game(config.status)
         await bot.change_presence(status = disnake.Status.online, activity = game)
         logging.info(f"{config.bot_name} ready.")
-        #print(f"{now} INFO - {config.bot_name} ready.") 
+        
 
     except Exception as e:
         logging.warning(f"Failed to set status correctly. {e}")
@@ -434,11 +433,6 @@ async def server_info(inter: disnake.ApplicationCommandInteraction):
         logging.info(f"{inter.author} tried to use the server_info command but was not authorised.")
         inter.send("That's not a command, it's a space station.", ephemeral=True)
         return
-
-
-
-  
-
 
 
 

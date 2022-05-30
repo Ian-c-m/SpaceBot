@@ -1,6 +1,7 @@
 # SpaceBot
 
 ![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/pfp.png)
+![v0.7.2](https://img.shields.io/badge/version-v0.7.2-blue)
 
 A Discord bot that has cool space features.
 Created by Big Spender#7291

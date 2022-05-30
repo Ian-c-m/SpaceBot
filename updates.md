@@ -1,3 +1,11 @@
+# Release v0.7.2 2022-05-30
+## Front end
+- No changes
+
+## __Back end__
+- Tweaked code for use on RPI
+
+
 # Release v0.7.2 2022-05-16
 ## Front end
 - Migrated to slash commands. Try using / and see what happens!
