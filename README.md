@@ -15,20 +15,21 @@ Created by Big Spender#7291
 |-|-|-|
 | astros | | Shows the number of astronauts in space. |
 | iss |  | Gives the live location of the International Space Station. |
+| launch | <launch name> | Gives info on the next launches, and more detailed info on a specific launch if given. |
 | news | | Shows today's space news. |
 | photos | <location> e.g. space | Shows various space photos. |
 | weather | <planet> e.g. mars | Gives information on a planet's weather. |
-| launch | <launch name> | Gives info on the next launches, and more detailed info on a specific launch if given. |
 | info | | Shows links to the GitHub, support Discord server and Top.gg page. |
 
 
 ## Current Features
+- Astronauts in Space
 - ISS Location
+- Rocket Launches
 - Space News
 - Space Pictures
 - Space Weather 
-- Rocket Launches
-- Astronauts in Space
+
 
 ## Future Features
 - Facts
