@@ -10,8 +10,8 @@ from datetime import datetime
 
 
 
-#bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
-bot = commands.InteractionBot()
+bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
+#bot = commands.InteractionBot()
 
 #########################################################################################
 #    STARTUP FUNCTIONS BELOW
@@ -340,7 +340,7 @@ async def photos(
         #there was an error message passed from the function
         if mars_photos[0] != "" or mars_photos is False:
             logging.warning(mars_photos[0])
-            await inter.send("Sorry I couldn't get the photo.")
+            await inter.edit_original_message(content = "Sorry I couldn't get the photo.")
         
         #no error so show photos
         else:

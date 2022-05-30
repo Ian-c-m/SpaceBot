@@ -215,7 +215,7 @@ def get_mars():
     rhaz_photo = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=RHAZ&sol={max_sol}&api_key={nasa_api_key}"
     nav_photo = f"https://api.nasa.gov/mars-photos/api/v1/rovers/Curiosity/photos?camera=NAVCAM&sol={max_sol}&api_key={nasa_api_key}"
 
-
+    photo_date = ""
 
     with urllib.request.urlopen(fhaz_photo) as fhaz:
         front_data = json.loads(fhaz.read().decode())       
