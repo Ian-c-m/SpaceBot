@@ -2,7 +2,7 @@
 
 ![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/pfp.png)
 
-![v0.7.2](https://img.shields.io/badge/version-v0.7.3-blue)
+![v0.7.3](https://img.shields.io/badge/version-v0.7.3-blue)
 
 A Discord bot that has cool space features.
 
