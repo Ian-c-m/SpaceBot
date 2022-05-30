@@ -11,10 +11,8 @@ from datetime import datetime
 
 
 #TODO: Replace this with the one below once your code is live. Once live, changes to commands can take up to 1 hour to sync any slash commands.
-bot = commands.Bot(test_guilds = [config.test_guild_id], intents=config.needed_intents)
-#bot = commands.Bot(intents=config.needed_intents)
-
-
+bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
+#bot = commands.InteractionBot()
 
 #########################################################################################
 #    STARTUP FUNCTIONS BELOW
@@ -48,14 +46,14 @@ async def on_ready():
     now = datetime.now()
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     try:
+        
         game = disnake.Game(config.status)
         await bot.change_presence(status = disnake.Status.online, activity = game)
-        logging.info(f"{config.bot_name} ready.")      
-        print(f"{now} INFO - {config.bot_name} ready.") 
+        logging.info(f"{config.bot_name} ready.")
+        #print(f"{now} INFO - {config.bot_name} ready.") 
 
     except Exception as e:
-        logging.warning(f"Failed to set status correctly. {e}")   
-        print(f"{now} WARNING - failed to set status correctly. {e}")    
+        logging.warning(f"Failed to set status correctly. {e}")
 
 
 #When the bot gets invited to a guild
@@ -390,6 +388,7 @@ async def info(
         info_embed.add_field(name="Bot Code on Github", value=config.github_link, inline=False)
                
         await inter.send(embed=info_embed, ephemeral=hidden)
+
 
 
 
