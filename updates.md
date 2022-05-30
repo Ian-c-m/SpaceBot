@@ -1,3 +1,37 @@
+# Release v0.7.2 2022-05-30
+## Front end
+- No changes
+
+## __Back end__
+- Tweaked code for use on RPI
+
+
+# Release v0.7.2 2022-05-16
+## Front end
+- Migrated to slash commands. Try using / and see what happens!
+
+## __Back end__
+- Finalised transition to new library.
+
+
+# Release v0.7.1 2022-04-14
+## Front end
+- No changes
+
+## Back end
+- Finished transition to disnake.py and slash commands
+
+
+
+# Release v0.7.0 2022-02-25
+## Front end
+- No changes
+
+## Back end
+- Starting transition to disnake.py and slash commands
+
+
+
 # Release v0.6.1 2022-02-10
 ## Front end
 - Added extra details to info command
