@@ -1,3 +1,11 @@
+# Release v0.7.3 2022-06-06
+## Front end
+- Updated server_info command to handle large amounts of joined servers
+
+## __Back end__
+- Exception handling for too large messages.
+
+
 # Release v0.7.2 2022-05-30
 ## Front end
 - No changes
