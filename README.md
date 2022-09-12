@@ -1,6 +1,6 @@
 # SpaceBot
 
-![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/pfp.png)
+![pfp](/pfp.png?raw=true)
 
 ![v0.7.3](https://img.shields.io/badge/version-v0.7.3-blue)
 
