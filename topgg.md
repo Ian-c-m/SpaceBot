@@ -1,8 +1,8 @@
 # SpaceBot
 
-![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/pfp.png)
+![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/2.jpg)
 
-![v0.7.4](https://img.shields.io/badge/version-v0.7.4-blue)
+![version](https://img.shields.io/github/v/release/quackersian/space-bot) ![issues](https://img.shields.io/github/issues/quackersian/space-bot) 
 
 A Discord bot that has cool space features.
 
@@ -24,7 +24,7 @@ Created by Big Spender#7291
 | news | | Shows today's space news. |
 | photos | <location> e.g. space | Shows various space photos. |
 | pw | <planet> e.g. mars | Gives information on a planet's weather. |
-| launch | <launch name> | Gives info on the next launches, and more detailed info on a specific launch if given. |
+| launch | <launch name> | Gives info on the next launches. |
 | info | | Shows links to the GitHub, support Discord server and Top.gg page. |
 
 
