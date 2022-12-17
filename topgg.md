@@ -1,6 +1,6 @@
 # SpaceBot
 
-![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/0.jpg)
+![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/2.jpg)
 
 ![version](https://img.shields.io/github/v/release/quackersian/space-bot) ![issues](https://img.shields.io/github/issues/quackersian/space-bot) 
 
