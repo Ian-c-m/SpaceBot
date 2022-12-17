@@ -2,7 +2,7 @@
 
 ![pfp](/pfp.png?raw=true)
 
-![v0.7.4](https://img.shields.io/badge/version-v0.7.4-blue)
+![v0.7.4](https://img.shields.io/badge/version-v0.7.4-blue) ![issues](https://img.shields.io/github/issues/quackersian/space-bot)
 
 A Discord bot that has cool space features.
 
