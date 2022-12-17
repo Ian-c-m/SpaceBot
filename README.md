@@ -20,7 +20,7 @@ Created by Big Spender#7291
 |-|-|-|
 | astros | | Shows the number of astronauts in space. |
 | iss |  | Gives the live location of the International Space Station. |
-| launch | <launch name> | Gives info on the next launches, and more detailed info on a specific launch if given. |
+| launch | <launch name> | Gives info on the next launches. |
 | news | | Shows today's space news. |
 | photos | <location> e.g. space | Shows various space photos. |
 | weather | <planet> e.g. mars | Gives information on a planet's weather. |
