@@ -1,12 +1,6 @@
 import feedparser, disnake, logging
 from datetime import datetime
-
-testing = False
-
-if testing == True:
-    news_url = "https://www.space.com/feeds/all"
-else:
-    from modules.module_config import news_url
+from modules.module_config import news_url
 
 
 log = logging.getLogger(__name__)

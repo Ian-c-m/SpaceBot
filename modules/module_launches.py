@@ -1,4 +1,4 @@
-import requests, disnake, logging
+import requests, disnake, logging, time
 from modules.module_config import launch_url
 from datetime import datetime
 log = logging.getLogger(__name__)
@@ -29,12 +29,25 @@ def get_basic_launch_info():
     for i in range(5):
         #loop through the 5 launches and add them to the embed
         try:
-            launch = response_json["result"][i]
 
-            launch_description = launch["launch_description"]            
-            launch_mission = launch["name"]
+            launch = response_json['result'][i]
+            
+            if launch['win_open'] is not None:
+                #we have a valid timestamp from the json
+                launch_timestamp = datetime.strptime(launch['win_open'], "%Y-%m-%dT%H:%MZ")               
+                    
+                launch_timestamp = int(time.mktime(launch_timestamp.timetuple()))
+                launch_timestamp_discord = f"<t:{launch_timestamp}:f> in your timezone."
+
+            else:
+                #there is no valid timestamp from json, so set a blank
+                launch_timestamp_discord = ""
+
+            launch_description = f"{launch['launch_description']} ({launch_timestamp_discord})"
+            launch_mission = launch['name']
 
             launch_embed.add_field(name=launch_mission, value=launch_description, inline = False)
+            
 
 
         except Exception as e:

@@ -49,7 +49,7 @@ async def on_ready():
         game = disnake.Game(config.status)
         await bot.change_presence(status = disnake.Status.online, activity = game)
         logging.info(f"{config.bot_name} ready.")
-        print("ready")
+        print(f"{config.bot_name} ready.")
         
 
     except Exception as e:
@@ -474,4 +474,4 @@ async def server_info(
 
 if __name__ == "__main__":
     setup_logging()
-    bot.run(tokens.test_token)
+    bot.run(tokens.discord_test_token)

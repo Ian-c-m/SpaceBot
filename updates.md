@@ -1,3 +1,10 @@
+# Release v0.7.4 2022-12-17
+## Front end
+- /launch command now uses Discord's relative times feature
+
+## __Back end__
+- None.
+
 # Release v0.7.3 2022-06-06
 ## Front end
 - Updated server_info command to handle large amounts of joined servers
