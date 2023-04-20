@@ -1,6 +1,6 @@
 # SpaceBot
 
-![pfp](/pfp2.jpg?raw=true)
+![pfp](/pfp2.png?raw=true)
 
 ![version](https://img.shields.io/github/v/release/ian-c-m/space-bot) ![issues](https://img.shields.io/github/issues/ian-c-m/space-bot) 
 
