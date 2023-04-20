@@ -1,14 +1,10 @@
 # SpaceBot
 
-![pfp](https://raw.githubusercontent.com/quackersian/space-bot/main/2.jpg)
+![pfp](https://raw.githubusercontent.com/ian-c-m/space-bot/main/pfp2.jpg)
 
-![version](https://img.shields.io/github/v/release/quackersian/space-bot) ![issues](https://img.shields.io/github/issues/quackersian/space-bot) 
+![version](https://img.shields.io/github/v/release/ian-c-m/space-bot) ![issues](https://img.shields.io/github/issues/ian-c-m/space-bot) 
 
 A Discord bot that has cool space features.
-
-Now using slash commands! Reinvite the bot if it's not working.
-
-Created by Big Spender#7291
 
 [top.gg Info page](https://top.gg/bot/849246857309323284/)
 
