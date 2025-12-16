@@ -2,11 +2,9 @@
 
 ![pfp](/pfp_small.png?raw=true)
 
-![version](https://img.shields.io/github/v/release/ian-c-m/SpaceBot) ![issues](https://img.shields.io/github/issues/ian-c-m/SpaceBot) 
+![GitHub Release](https://img.shields.io/github/v/release/:user/:repo) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ian-c-m/SpaceBot)
 
 A Discord bot that has cool space features.
-
-[top.gg Info page](https://top.gg/bot/849246857309323284/)
 
 [Invite link](https://discord.com/api/oauth2/authorize?client_id=849246857309323284&permissions=274877958144&scope=bot%20applications.commands)
 
