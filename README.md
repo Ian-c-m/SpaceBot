@@ -2,7 +2,7 @@
 
 ![pfp](/pfp_small.png?raw=true)
 
-![GitHub Release](https://img.shields.io/github/v/release/:user/:repo) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ian-c-m/SpaceBot)
+![GitHub Release](https://img.shields.io/github/v/release/ian-c-m/SpaceBot) ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ian-c-m/SpaceBot)
 
 A Discord bot that has cool space features.
 
@@ -40,3 +40,4 @@ A Discord bot that has cool space features.
 * Send Messages in Threads
 * Embed links
 * Attach Files
+
