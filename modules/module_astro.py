@@ -1,4 +1,4 @@
-import requests, disnake, logging
+import requests, logging
 from modules.module_config import astro_url
 
 log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def get_astros():
         if astro_request["message"] == "success":
 
             crafts = set(())
-            astro_message = f"\n**There are {astro_count} people in space right now!** \n\n"
+            astro_message = f"## There are {astro_count} people in space right now! \n"
 
             for person in astro_request["people"]:
                 #get a set of all crafts.
@@ -34,12 +34,13 @@ def get_astros():
 
             for craft in crafts:
                 #loop through crafts and assemble message with people in it
-                astro_message += f"__{craft}__ \n"
+                astro_message += f"# __**{craft}**__ \n"
 
                 for person in astro_request["people"]:
                     #find all the people on board the craft and add them to the message
                     if person["craft"] == craft:
-                        astro_message += f"· {person['name']} \n"
+                        astro_message += f"- {person['name']} \n"
+                
 
             
             return astro_message, 0
