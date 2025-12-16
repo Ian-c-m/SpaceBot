@@ -1,9 +1,27 @@
+# Release v0.8.0 2025-12-16
+## Front end
+- Removed Mars option from /photos due to discontinued API
+- Modified /astro command reply to be prettier
+
+## __Back end__
+- Generated new API tokens as others were out of date
+
+# Release v0.7.3 2022-06-06
+## Front end
+- Updated server_info command to handle large amounts of joined servers
+
+## __Back end__
+- Exception handling for too large messages.
+
+
+
+
 # Release v0.7.4 2022-12-17
 ## Front end
 - /launch command now uses Discord's relative times feature
 
 ## __Back end__
-- None.
+- None
 
 # Release v0.7.3 2022-06-06
 ## Front end

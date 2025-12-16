@@ -7,7 +7,7 @@ log = logging.getLogger(__name__)
 
 
 class Location(str, Enum):
-    Mars = "mars"
+    #Mars = "mars" # discontinued :sadface:
     space = "apod"
 
 
