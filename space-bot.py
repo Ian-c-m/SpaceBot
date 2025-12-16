@@ -6,11 +6,12 @@ import modules.module_launches as module_launches
 import modules.module_astro as module_astro
 import modules.module_photos as module_photos
 from disnake.ext import commands
+from disnake import ApplicationCommandInteraction
 from datetime import datetime
 
 
 
-bot = commands.InteractionBot(test_guilds=[config.test_guild_id])
+bot = commands.InteractionBot(test_guilds=[tokens.test_guild_id])
 #bot = commands.InteractionBot()
 
 #########################################################################################
@@ -58,12 +59,12 @@ async def on_ready():
 
 #When the bot gets invited to a guild
 @bot.event
-async def on_guild_join(guild):
+async def on_guild_join(guild: disnake.Guild):
     logging.info(f"Joined {guild.name}.")
 
 #When the bot gets removed (kicked, banned, left etc) from a guild
 @bot.event
-async def on_guild_remove(guild):
+async def on_guild_remove(guild: disnake.Guild):
     logging.info(f"Left {guild.name}.")
 
 
@@ -75,7 +76,7 @@ async def on_guild_remove(guild):
 
 @bot.slash_command(description="Gives top ten space news stories.")
 async def news(
-    inter: disnake.ApplicationCommandInteraction,
+    inter: ApplicationCommandInteraction, 
     hidden: bool = commands.Param(default = False, description = "Whether to hide this from others or not.")
     ):
 
@@ -114,7 +115,7 @@ async def iss(
     logging.info(f"{inter.author} used the iss command.")
 
     #show that we are doing something as command might be slow to respond.
-    await inter.channel.trigger_typing()
+    await inter.channel.trigger_typing() # type: ignore
 
     iss_loc = module_iss.get_iss()
     
@@ -186,12 +187,12 @@ async def launch(
 
 
     #if launch_name is None:
-        #just get the next 5 launches.
+    #    just get the next 5 launches.
     launch = module_launches.get_basic_launch_info()
 
-    """else:
-        #get detailed info about the given launch
-        launch = module_launches.get_detailed_launch_info(launch_name)"""
+    #else:
+    #    get detailed info about the given launch
+    #    launch = module_launches.get_detailed_launch_info(launch_name)
 
 
     if launch[0] == 0:
@@ -466,7 +467,7 @@ async def server_info(
     else:
         #user was not allowed to use this command.
         logging.info(f"{inter.author} tried to use the server_info command but was not authorised.")
-        inter.send("That's not a command, it's a space station.", ephemeral=True)
+        await inter.send("That's not a command, it's a space station.", ephemeral=True)
         return
 
 
